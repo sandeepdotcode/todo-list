@@ -1,7 +1,6 @@
 class Project {
-  constructor(name, colour) {
+  constructor(name) {
     this.name = name;
-    this.colour = colour;
   }
 
   taskList = [];
@@ -23,4 +22,6 @@ class Project {
   }
 }
 
-export default Project;
+const createProject = (name) => new Project(name);
+
+export default createProject;

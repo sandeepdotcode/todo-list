@@ -1,9 +1,10 @@
 class Task {
-  constructor(name, description, priority, dueDate) {
+  constructor(name, description, priority, dueDate, checkList) {
     this.name = name;
     this.description = description;
     this.priority = priority;
     this.dueDate = dueDate;
+    this.checkList = checkList;
     this.isCompleted = false;
   }
 
@@ -19,4 +20,8 @@ class Task {
   }
 }
 
-export default Task;
+function createTask(name, description, priority, dueDate, checkList = []) {
+  return new Task(name, description, priority, dueDate, checkList);
+}
+
+export default createTask;
