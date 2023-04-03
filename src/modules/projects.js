@@ -9,6 +9,10 @@ class Project {
     this.taskList.push(task);
   }
 
+  getTasks() {
+    return this.taskList;
+  }
+
   findTaskIndex(name, dueDate) {
     return this.taskList.findIndex((task) => {
       const isSameTask = (task.name === name && task.dueDate === dueDate);
