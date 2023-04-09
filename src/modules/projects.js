@@ -1,3 +1,5 @@
+import { isSameMinute } from 'date-fns';
+
 class Project {
   constructor(name) {
     this.name = name;
@@ -13,15 +15,15 @@ class Project {
     return this.taskList;
   }
 
-  findTaskIndex(name, dueDate) {
+  findTaskIndex(name, date) {
     return this.taskList.findIndex((task) => {
-      const isSameTask = (task.name === name && task.dueDate === dueDate);
+      const isSameTask = (task.name === name && isSameMinute(task.getCreationTime(), date));
       return isSameTask;
     });
   }
 
-  removeTask(task) {
-    const index = this.findTaskIndex(task.name, task.dueDate);
+  removeTask(taskName, creationTime) {
+    const index = this.findTaskIndex(taskName, creationTime);
     this.taskList.splice(index, 1);
   }
 }
