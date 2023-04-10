@@ -1,3 +1,4 @@
+import { formatDistanceToNowStrict } from 'date-fns';
 import createTask from './todos';
 import createProject from './projects';
 
@@ -33,7 +34,19 @@ function deleteTask(name, creationTimeStamp) {
   currentProject.removeTask(name, creationTimeStamp);
 }
 
+function displayTasks(tasks) {
+  console.table(tasks.map((task) => ({
+    name: task.name,
+    description: task.description,
+    checkList: task.checkList,
+    priority: task.priority,
+    dueDate: formatDistanceToNowStrict(task.dueDate),
+    timestamp: task.getCreationTime(),
+    status: task.isCompleted,
+  })));
+}
+
 export {
   addNewProject, deleteProject, addNewTask,
-  deleteTask,
+  deleteTask, displayTasks,
 };
