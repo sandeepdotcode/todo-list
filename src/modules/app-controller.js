@@ -1,4 +1,7 @@
-import { formatDistanceToNowStrict } from 'date-fns';
+import {
+  addDays, isSameDay, isWithinInterval, startOfToday,
+  formatDistanceToNowStrict,
+} from 'date-fns';
 import createTask from './todos';
 import createProject from './projects';
 
@@ -34,6 +37,29 @@ function deleteTask(name, creationTimeStamp) {
   currentProject.removeTask(name, creationTimeStamp);
 }
 
+function getDaysTasks(date) {
+  const tasks = [];
+  projects.forEach((project) => {
+    const tasksToday = project.getTasks().filter((task) => isSameDay(task.dueDate, date));
+    tasks.push(...tasksToday); // a.push(...b) stack overflows if b > 100000
+  });
+  return tasks;
+}
+
+function getWeeksTasks() {
+  const tasks = [];
+  const startDate = startOfToday();
+  const endDate = addDays(startDate, 7);
+  projects.forEach((project) => {
+    const projTasks = project.getTasks().filter((task) => isWithinInterval(task.dueDate, {
+      start: startDate,
+      end: endDate,
+    }));
+    tasks.push(...projTasks);
+  });
+  return tasks;
+}
+
 function displayTasks(tasks) {
   console.table(tasks.map((task) => ({
     name: task.name,
@@ -48,5 +74,5 @@ function displayTasks(tasks) {
 
 export {
   addNewProject, deleteProject, addNewTask,
-  deleteTask, displayTasks,
+  deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
 };
