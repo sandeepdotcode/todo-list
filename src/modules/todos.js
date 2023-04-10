@@ -1,5 +1,5 @@
 class Task {
-  #creationtime;
+  #creationTimeStamp;
 
   constructor(name, description, priority, dateString, checkList) {
     this.name = name;
@@ -9,7 +9,7 @@ class Task {
     this.checkList = checkList;
     this.isCompleted = false;
 
-    this.#creationtime = new Date();
+    this.#creationTimeStamp = Date.now();
   }
 
   editTask(name, description, priority, dueDate) {
@@ -24,7 +24,7 @@ class Task {
   }
 
   getCreationTime() {
-    return this.#creationtime;
+    return this.#creationTimeStamp;
   }
 }
 
