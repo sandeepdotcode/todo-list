@@ -9,8 +9,8 @@ getSampleTasks().forEach((task) => {
 });
 
 function todoListDisplay() {
-  console.log('Default List');
-  changeView('default');
+  console.log('Inbox:');
+  changeView('inbox');
   console.log('Today\'s Tasks:');
   changeView('today');
   console.log('This Week:');

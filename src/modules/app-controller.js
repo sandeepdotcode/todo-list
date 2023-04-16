@@ -6,7 +6,7 @@ import createTask from './todos';
 import createProject from './projects';
 
 const projects = [];
-projects.push(createProject('default'));
+projects.push(createProject('inbox'));
 // currentView can be either of
 // today, week or project
 let currentView = 'today';
@@ -85,7 +85,7 @@ function displayTasks(tasks) {
   })));
 }
 
-function changeView(view, projectName = 'default') {
+function changeView(view, projectName = 'inbox') {
   switch (view) {
     case 'today':
       currentView = 'today';
@@ -95,7 +95,7 @@ function changeView(view, projectName = 'default') {
       currentView = 'week';
       displayTasks(getWeeksTasks());
       break;
-    case 'default':
+    case 'inbox':
     case 'project':
       currentView = 'project';
       currentProject = projects[getProjectIndex(projectName)];
