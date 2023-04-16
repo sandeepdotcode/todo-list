@@ -23,7 +23,7 @@ function addNewProject(name = '') {
 }
 
 function getProjectIndex(name) {
-  projects.findIndex((project) => project.name === name);
+  return projects.findIndex((project) => project.name === name);
 }
 
 function deleteProject(name) {
