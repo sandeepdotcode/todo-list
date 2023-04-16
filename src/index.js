@@ -1,5 +1,5 @@
 import {
-  addNewProject, addNewTask, deleteTask, displayTasks, getDaysTasks,
+  addNewProject, addNewTask, changeView, deleteTask, displayTasks, getDaysTasks,
   getWeeksTasks,
 } from './modules/app-controller';
 import getSampleTasks from './modules/sample-tasks';
@@ -10,10 +10,11 @@ getSampleTasks().forEach((task) => {
 
 function todoListDisplay() {
   console.log('Default List');
+  changeView('default');
   console.log('Today\'s Tasks:');
-  displayTasks(getDaysTasks(new Date()));
+  changeView('today');
   console.log('This Week:');
-  displayTasks(getWeeksTasks());
+  changeView('week');
 }
 
 todoListDisplay();

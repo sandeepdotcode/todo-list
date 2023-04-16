@@ -7,7 +7,12 @@ import createProject from './projects';
 
 const projects = [];
 projects.push(createProject('default'));
-const currentProject = projects[0];
+// currentView can be either of
+// today, week or project
+let currentView = 'today';
+let currentProject = projects[0];
+// Dictates whether completed tasks are returned or not
+const dueOnly = true;
 
 function addNewProject(name = '') {
   if (name === '') {
@@ -37,10 +42,18 @@ function deleteTask(name, creationTimeStamp) {
   currentProject.removeTask(name, creationTimeStamp);
 }
 
-function getDaysTasks(date) {
+function getCurrProjTasks() {
+  if (dueOnly) { return currentProject.getTasks().filter((task) => task.isCompleted === false); }
+  return currentProject.getTasks();
+}
+
+function getDaysTasks(date = new Date()) {
   const tasks = [];
   projects.forEach((project) => {
-    const tasksToday = project.getTasks().filter((task) => isSameDay(task.dueDate, date));
+    const tasksToday = project.getTasks().filter((task) => {
+      const isTaskCompleted = (task.isCompleted !== dueOnly);
+      return isSameDay(task.dueDate, date) && isTaskCompleted;
+    });
     tasks.push(...tasksToday); // a.push(...b) stack overflows if b > 100000
   });
   return tasks;
@@ -54,7 +67,7 @@ function getWeeksTasks() {
     const projTasks = project.getTasks().filter((task) => isWithinInterval(task.dueDate, {
       start: startDate,
       end: endDate,
-    }));
+    }) && task.isCompleted !== dueOnly);
     tasks.push(...projTasks);
   });
   return tasks;
@@ -72,7 +85,29 @@ function displayTasks(tasks) {
   })));
 }
 
+function changeView(view, projectName = 'default') {
+  switch (view) {
+    case 'today':
+      currentView = 'today';
+      displayTasks(getDaysTasks());
+      break;
+    case 'week':
+      currentView = 'week';
+      displayTasks(getWeeksTasks());
+      break;
+    case 'default':
+    case 'project':
+      currentView = 'project';
+      currentProject = projects[getProjectIndex(projectName)];
+      displayTasks(getCurrProjTasks());
+      break;
+    default:
+      console.log('changeView() Error: Invalid Argument!');
+  }
+}
+
 export {
   addNewProject, deleteProject, addNewTask,
   deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
+  changeView,
 };
