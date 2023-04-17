@@ -41,7 +41,7 @@ function addNewTask(
   description,
   priority,
   dueDate,
-  checkList = [],
+  checkList = null,
   projectName = null,
 ) {
   const task = createTask(name, description, priority, dueDate, checkList);

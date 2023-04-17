@@ -6,7 +6,7 @@ class Task {
     this.description = description;
     this.priority = priority;
     this.dueDate = new Date(dateString);
-    this.checkList = checkList;
+    this.checkList = checkList || null;
     this.isCompleted = false;
 
     this.#creationTimeStamp = Date.now();
