@@ -4,6 +4,7 @@ import {
 } from 'date-fns';
 import createTask from './todos';
 import createProject from './projects';
+import getSampleTasks from './sample-tasks';
 
 const projects = [];
 projects.push(createProject('inbox'));
@@ -13,6 +14,10 @@ let currentView = 'today';
 let currentProject = projects[0];
 // Dictates whether completed tasks are returned or not
 let dueOnly = true;
+
+(function addSampleTasks() {
+  getSampleTasks().forEach((task) => currentProject.addTask(task));
+}());
 
 function addNewProject(name = '') {
   if (name === '') {
@@ -31,11 +36,17 @@ function deleteProject(name) {
   projects.splice(index, 1);
 }
 
-function addNewTask({
-  name, description, priority, dueDate, checkList = [],
-}) {
+function addNewTask(
+  name,
+  description,
+  priority,
+  dueDate,
+  checkList = [],
+  projectName = null,
+) {
   const task = createTask(name, description, priority, dueDate, checkList);
-  currentProject.addTask(task);
+  const project = (projectName === null ? currentProject : projects[getProjectIndex(projectName)]);
+  project.addTask(task);
 }
 
 function deleteTask(name, creationTimeStamp) {
@@ -113,5 +124,5 @@ function changeView(view, projectName = 'inbox') {
 export {
   addNewProject, deleteProject, addNewTask,
   deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
-  changeView,
+  changeView, toggleShowDueOnly,
 };
