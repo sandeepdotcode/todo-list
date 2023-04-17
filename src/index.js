@@ -15,6 +15,7 @@ function todoListDisplay() {
   changeView('today');
   console.log('This Week:');
   changeView('week');
+  addNewProject('Shopping List');
 }
 
 todoListDisplay();

@@ -12,7 +12,7 @@ projects.push(createProject('inbox'));
 let currentView = 'today';
 let currentProject = projects[0];
 // Dictates whether completed tasks are returned or not
-const dueOnly = true;
+let dueOnly = true;
 
 function addNewProject(name = '') {
   if (name === '') {
@@ -40,6 +40,10 @@ function addNewTask({
 
 function deleteTask(name, creationTimeStamp) {
   currentProject.removeTask(name, creationTimeStamp);
+}
+
+function toggleShowDueOnly() {
+  dueOnly = !(dueOnly);
 }
 
 function getCurrProjTasks() {
