@@ -72,7 +72,6 @@ function addSubTask(text, taskName, creationTimeStamp, projectName = null) {
 
 function toggleSubTask(text, taskName, creationTimeStamp, projectName = null) {
   const task = getProject(projectName).getTask(taskName, creationTimeStamp);
-  console.log(task);
   task.toggleCheckCompletion(text);
 }
 
