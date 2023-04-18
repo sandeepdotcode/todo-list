@@ -12,13 +12,6 @@ class Task {
     this.#creationTimeStamp = Date.now();
   }
 
-  editTask(name, description, priority, dueDate) {
-    this.name = name;
-    this.description = description;
-    this.priority = priority;
-    this.dueDate = dueDate;
-  }
-
   addToCheckList(text) {
     if (!this.checkList) this.checkList = [];
     this.checkList.push({ text, isDone: false });

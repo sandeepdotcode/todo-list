@@ -36,6 +36,11 @@ function getProject(name) {
   return projects[getProjectIndex(name)];
 }
 
+function getTaskFromProject(taskName, creationTimeStamp, projectName) {
+  const project = getProject(projectName);
+  return project.getTask(taskName, creationTimeStamp);
+}
+
 function deleteProject(name) {
   const index = getProjectIndex(name);
   projects.splice(index, 1);
@@ -54,29 +59,44 @@ function addNewTask(
   project.addTask(task);
 }
 
+function changeTaskPriority(taskName, creationTimeStamp, newPriority, projectName = null) {
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
+  task.priority = newPriority;
+}
+
+function changeDueDate(taskName, creationTimeStamp, newDateStr, projectName = null) {
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
+  task.dueDate = new Date(newDateStr);
+}
+
+function editTask(taskName, creationTimeStamp, newName, newDescrip, projectName = null) {
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
+  task.name = newName;
+  task.description = newDescrip;
+}
+
 function deleteTask(name, creationTimeStamp, projectName = null) {
   const project = getProject(projectName);
   project.removeTask(name, creationTimeStamp);
 }
 
 function toggleTaskCompletion(name, creationTimeStamp, projectName = null) {
-  const project = getProject(projectName);
-  project.getTask(name, creationTimeStamp).toggleCompletion();
+  const task = getTaskFromProject(name, creationTimeStamp, projectName);
+  task.toggleCompletion();
 }
 
 function addSubTask(text, taskName, creationTimeStamp, projectName = null) {
-  const project = getProject(projectName);
-  const task = project.getTask(taskName, creationTimeStamp);
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
   task.addToCheckList(text);
 }
 
 function toggleSubTask(text, taskName, creationTimeStamp, projectName = null) {
-  const task = getProject(projectName).getTask(taskName, creationTimeStamp);
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
   task.toggleCheckCompletion(text);
 }
 
 function deleteSubTask(text, taskName, creationTimeStamp, projectName = null) {
-  const task = getProject(projectName).getTask(taskName, creationTimeStamp);
+  const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
   task.removeFromCheckList(text);
 }
 
@@ -153,4 +173,5 @@ export {
   deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
   changeView, toggleShowDueOnly, toggleTaskCompletion,
   addSubTask, toggleSubTask, deleteSubTask,
+  changeTaskPriority, changeDueDate, editTask,
 };

@@ -1,6 +1,6 @@
 import {
-  addNewProject, addNewTask, addSubTask, changeView,
-  deleteSubTask, deleteTask, displayTasks, getDaysTasks,
+  addNewProject, addNewTask, addSubTask, changeDueDate, changeTaskPriority, changeView,
+  deleteSubTask, deleteTask, displayTasks, editTask, getDaysTasks,
   getWeeksTasks, toggleShowDueOnly, toggleSubTask,
   toggleTaskCompletion,
 } from './modules/app-controller';
@@ -24,6 +24,9 @@ function todoListDisplay() {
   window.togglCheck = toggleSubTask;
   window.deleteCheck = deleteSubTask;
   addNewTask('Buy Fish', 'Buy some fish', 1, '2023-04-17', null, 'Shopping List');
+  window.changePrio = changeTaskPriority;
+  window.changeDue = changeDueDate;
+  window.editTask = editTask;
 }
 
 todoListDisplay();
