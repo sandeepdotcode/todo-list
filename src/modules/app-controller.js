@@ -2,6 +2,7 @@ import {
   addDays, isSameDay, isWithinInterval, startOfToday,
   formatDistanceToNowStrict,
   isPast,
+  compareAsc,
 } from 'date-fns';
 import createTask from './todos';
 import createProject from './projects';
@@ -121,7 +122,7 @@ function getDaysTasks(date = new Date()) {
     });
     tasks.push(...tasksToday); // a.push(...b) stack overflows if b > 100000
   });
-  return tasks;
+  return tasks.sort((a, b) => compareAsc(a.dueDate, b.dueDate));
 }
 
 function getWeeksTasks() {
@@ -140,7 +141,7 @@ function getWeeksTasks() {
     });
     tasks.push(...projTasks);
   });
-  return tasks;
+  return tasks.sort((a, b) => compareAsc(a.dueDate, b.dueDate));
 }
 
 function displayTasks(tasks) {
