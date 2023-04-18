@@ -1,7 +1,6 @@
 import {
   addNewProject, addNewTask, addSubTask, changeDueDate, changeTaskPriority, changeView,
-  deleteSubTask, deleteTask, displayTasks, editTask, getDaysTasks,
-  getWeeksTasks, toggleShowDueOnly, toggleSubTask,
+  deleteSubTask, deleteTask, editTask, toggleShowDueOnly, toggleSubTask,
   toggleTaskCompletion,
 } from './modules/app-controller';
 

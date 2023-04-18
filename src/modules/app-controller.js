@@ -1,6 +1,7 @@
 import {
   addDays, isSameDay, isWithinInterval, startOfToday,
   formatDistanceToNowStrict,
+  isPast,
 } from 'date-fns';
 import createTask from './todos';
 import createProject from './projects';
@@ -113,8 +114,10 @@ function getDaysTasks(date = new Date()) {
   const tasks = [];
   projects.forEach((project) => {
     const tasksToday = project.getTasks().filter((task) => {
+      const isOverDue = isPast(task.dueDate) && !task.isCompleted;
       const isTaskCompleted = (task.isCompleted !== dueOnly);
-      return isSameDay(task.dueDate, date) && isTaskCompleted;
+      const isToday = isSameDay(task.dueDate, date) && isTaskCompleted;
+      return isOverDue || isToday;
     });
     tasks.push(...tasksToday); // a.push(...b) stack overflows if b > 100000
   });
@@ -126,10 +129,15 @@ function getWeeksTasks() {
   const startDate = startOfToday();
   const endDate = addDays(startDate, 7);
   projects.forEach((project) => {
-    const projTasks = project.getTasks().filter((task) => isWithinInterval(task.dueDate, {
-      start: startDate,
-      end: endDate,
-    }) && task.isCompleted !== dueOnly);
+    const projTasks = project.getTasks().filter((task) => {
+      const isOverDue = isPast(task.dueDate) && !task.isCompleted;
+      const isTaskCompleted = (task.isCompleted !== dueOnly);
+      const isThisWeek = isWithinInterval(task.dueDate, {
+        start: startDate,
+        end: endDate,
+      }) && isTaskCompleted;
+      return isOverDue || isThisWeek;
+    });
     tasks.push(...projTasks);
   });
   return tasks;
