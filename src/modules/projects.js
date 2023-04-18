@@ -9,6 +9,11 @@ class Project {
     this.taskList.push(task);
   }
 
+  getTask(name, creationTime) {
+    const index = this.findTaskIndex(name, creationTime);
+    return this.taskList[index];
+  }
+
   getTasks() {
     return this.taskList;
   }

@@ -31,6 +31,11 @@ function getProjectIndex(name) {
   return projects.findIndex((project) => project.name === name);
 }
 
+function getProject(name) {
+  if (name === null) return currentProject;
+  return projects[getProjectIndex(name)];
+}
+
 function deleteProject(name) {
   const index = getProjectIndex(name);
   projects.splice(index, 1);
@@ -45,12 +50,18 @@ function addNewTask(
   projectName = null,
 ) {
   const task = createTask(name, description, priority, dueDate, checkList);
-  const project = (projectName === null ? currentProject : projects[getProjectIndex(projectName)]);
+  const project = getProject(projectName);
   project.addTask(task);
 }
 
-function deleteTask(name, creationTimeStamp) {
-  currentProject.removeTask(name, creationTimeStamp);
+function deleteTask(name, creationTimeStamp, projectName = null) {
+  const project = getProject(projectName);
+  project.removeTask(name, creationTimeStamp);
+}
+
+function toggleTaskCompletion(name, creationTimeStamp, projectName = null) {
+  const project = getProject(projectName);
+  project.getTask(name, creationTimeStamp).toggleCompletion();
 }
 
 function toggleShowDueOnly() {
@@ -124,5 +135,5 @@ function changeView(view, projectName = 'inbox') {
 export {
   addNewProject, deleteProject, addNewTask,
   deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
-  changeView, toggleShowDueOnly,
+  changeView, toggleShowDueOnly, toggleTaskCompletion,
 };
