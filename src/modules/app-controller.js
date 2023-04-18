@@ -64,6 +64,23 @@ function toggleTaskCompletion(name, creationTimeStamp, projectName = null) {
   project.getTask(name, creationTimeStamp).toggleCompletion();
 }
 
+function addSubTask(text, taskName, creationTimeStamp, projectName = null) {
+  const project = getProject(projectName);
+  const task = project.getTask(taskName, creationTimeStamp);
+  task.addToCheckList(text);
+}
+
+function toggleSubTask(text, taskName, creationTimeStamp, projectName = null) {
+  const task = getProject(projectName).getTask(taskName, creationTimeStamp);
+  console.log(task);
+  task.toggleCheckCompletion(text);
+}
+
+function deleteSubTask(text, taskName, creationTimeStamp, projectName = null) {
+  const task = getProject(projectName).getTask(taskName, creationTimeStamp);
+  task.removeFromCheckList(text);
+}
+
 function toggleShowDueOnly() {
   dueOnly = !(dueOnly);
 }
@@ -136,4 +153,5 @@ export {
   addNewProject, deleteProject, addNewTask,
   deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
   changeView, toggleShowDueOnly, toggleTaskCompletion,
+  addSubTask, toggleSubTask, deleteSubTask,
 };

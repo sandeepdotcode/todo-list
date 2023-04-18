@@ -1,6 +1,8 @@
 import {
-  addNewProject, addNewTask, changeView, deleteTask, displayTasks, getDaysTasks,
-  getWeeksTasks, toggleShowDueOnly, toggleTaskCompletion,
+  addNewProject, addNewTask, addSubTask, changeView,
+  deleteSubTask, deleteTask, displayTasks, getDaysTasks,
+  getWeeksTasks, toggleShowDueOnly, toggleSubTask,
+  toggleTaskCompletion,
 } from './modules/app-controller';
 
 function todoListDisplay() {
@@ -18,6 +20,10 @@ function todoListDisplay() {
   window.deleteTask = deleteTask;
   window.toggleTask = toggleTaskCompletion;
   window.toggleDue = toggleShowDueOnly;
+  window.addCheck = addSubTask;
+  window.togglCheck = toggleSubTask;
+  window.deleteCheck = deleteSubTask;
+  addNewTask('Buy Fish', 'Buy some fish', 1, '2023-04-17', null, 'Shopping List');
 }
 
 todoListDisplay();
