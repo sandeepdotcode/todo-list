@@ -1,3 +1,4 @@
+const HTMLWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
 
 module.exports = {
@@ -11,4 +12,10 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  plugins: [
+	  new HTMLWebpackPlugin({
+		  title: 'Tsilo Dot.',
+		  template: './src/index.html',
+	  }),
+  ],
 };
