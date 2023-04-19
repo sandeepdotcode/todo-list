@@ -1,11 +1,13 @@
+import { endOfDay } from 'date-fns';
+
 class Task {
   #creationTimeStamp;
 
   constructor(name, description, priority, dateString, checkList) {
     this.name = name;
     this.description = description;
-    this.priority = priority;
-    this.dueDate = new Date(dateString);
+    this.priority = priority; // 0 - no priority, 1 - high, 2 - med, 3 - low
+    this.dueDate = endOfDay(new Date(dateString));
     this.checkList = checkList || null;
     this.isCompleted = false;
 
