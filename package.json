@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "webpack serve --open"
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
@@ -21,13 +21,17 @@
   },
   "homepage": "https://github.com/sandeepdotcode/todo-list#readme",
   "devDependencies": {
+    "css-loader": "^6.7.3",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.5",
+    "style-loader": "^3.3.2",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.13.1"
+    "webpack-dev-server": "^4.13.1",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "date-fns": "^2.29.3"
