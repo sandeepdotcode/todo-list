@@ -1,0 +1,14 @@
+@import url(../assets/css/cabinet-grotesk.css);
+
+:root {
+    --bg-sidebar-light: #ccd0da;
+    --bg-light: #eff1f5;
+    --red-light: #d20f39;
+    --blue-light: #209fb5;
+    --teal-light: #179299;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--bg-light);
+}

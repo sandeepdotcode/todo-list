@@ -3,6 +3,9 @@ import {
   deleteSubTask, deleteTask, editTask, toggleShowDueOnly, toggleSubTask,
   toggleTaskCompletion,
 } from './modules/app-controller';
+import { initialLoad } from './modules/dom-controller';
+import './styles/reset.css';
+import './styles/style.css';
 
 function todoListDisplay() {
   console.log('Inbox:');
@@ -29,3 +32,5 @@ function todoListDisplay() {
 }
 
 todoListDisplay();
+
+initialLoad();
