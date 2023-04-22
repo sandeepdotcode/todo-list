@@ -33,6 +33,10 @@ function getProjectIndex(name) {
   return projects.findIndex((project) => project.name === name);
 }
 
+function getProjectNames() {
+  return projects.slice(1).map((project) => project.name);
+}
+
 function getProject(name) {
   if (name === null) return currentProject;
   return projects[getProjectIndex(name)];
@@ -183,4 +187,5 @@ export {
   changeView, toggleShowDueOnly, toggleTaskCompletion,
   addSubTask, toggleSubTask, deleteSubTask,
   changeTaskPriority, changeDueDate, editTask,
+  getProjectNames,
 };
