@@ -5,9 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tsilo Dot.</title>
-    <script defer src="./main.js"></script>
+    <script defer type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script defer nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body>
-    
+    <div class="container">
+        <header></header>
+        <nav class="sidebar">
+            <div class="side-display">
+                <div class="special-groups">
+                    <div class="inbox">
+                        <ion-icon name="file-tray" class="proj-icon inbox-icon" aria-hidden="true"></ion-icon>
+                        Inbox
+                    </div>
+                    <div class="today">
+                        <ion-icon name="calendar-number-outline" class="proj-icon today-icon" aria-hidden="true"></ion-icon>
+                        Today</div>
+                    <div class="this-week">
+                        <ion-icon name="calendar" class="proj-icon week-icon" aria-hidden="true"></ion-icon>
+                        This Week</div>
+                </div>
+                <div class="project-group">
+                    <h4 class="project-heading">Projects</h4>
+                    <div class="project-container">
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <main class="task-display"></div>
 </body>
 </html>
