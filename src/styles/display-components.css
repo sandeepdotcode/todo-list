@@ -1,0 +1,74 @@
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(250px, 15fr) 85fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-areas: "sidebar header"
+                         "sidebar display";
+}
+
+header {
+    grid-area: header;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    padding: 60px 5% 0;
+    font-family: 'CabinetGrotesk-Medium', sans-serif;
+    background-color: var(--bg-sidebar-light);
+}
+
+.side-display {
+    display: flex;
+    flex-direction: column;
+    gap: 10vh;
+}
+
+.task-diplay {
+    grid-area: display;
+}
+
+.special-groups div,
+.project-select {
+    width: 90%;
+    height: 2.2rem;
+    display: flex;
+    align-items: flex-end;
+    user-select: none;
+}
+
+.project-select {
+    padding-left: 5%;
+}
+
+.project-heading {
+    font-family: 'CabinetGrotesk-Bold';
+    user-select: none;
+}
+
+.special-groups div:hover,
+.project-select:hover {
+    cursor: pointer;
+}
+
+.proj-icon {
+    height: 60%;
+    width: 2rem;
+}
+
+.inbox-icon {
+    color: var(--blue-light);
+}
+
+.today-icon {
+    color: var(--red-light);
+    --ionicon-stroke-width: 35px;
+}
+
+.week-icon {
+    color: var(--teal-light);
+}
+
+header, main {
+    background-color: var(--bg-light);
+}

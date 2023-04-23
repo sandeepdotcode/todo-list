@@ -15,6 +15,7 @@ function todoListDisplay() {
   console.log('This Week:');
   changeView('week');
   addNewProject('Shopping List');
+  addNewProject('Fitness');
   window.addNewTask = addNewTask;
   // addNewTask('Buy Fish', 'Buy some fish', 1, '2023-04-17', null, 'Shopping List');
   // changeView('project', 'Shopping List');

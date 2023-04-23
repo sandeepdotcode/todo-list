@@ -1,6 +1,6 @@
 // const currentTask = process.env.npm_lifecycle_event;
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const miniCSSExtractPlugin = require('mini-css-extract-plugin');
+// const miniCSSExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 const config = {
