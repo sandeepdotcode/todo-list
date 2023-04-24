@@ -5,27 +5,30 @@
     grid-template-rows: 60px 1fr;
     grid-template-areas: "sidebar header"
                          "sidebar display";
+    overflow: hidden;
 }
 
 header {
     grid-area: header;
 }
 
+/* Sidebar Components */
 .sidebar {
     grid-area: sidebar;
-    padding: 60px 5% 0;
+    padding-top: 60px;
     font-family: 'CabinetGrotesk-Medium', sans-serif;
     background-color: var(--bg-sidebar-light);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
 }
 
 .side-display {
+    flex: 1 0 auto;
+    padding: 0 5%;
     display: flex;
     flex-direction: column;
     gap: 10vh;
-}
-
-.task-diplay {
-    grid-area: display;
 }
 
 .special-groups div,
@@ -33,8 +36,14 @@ header {
     width: 90%;
     height: 2.2rem;
     display: flex;
-    align-items: flex-end;
-    user-select: none;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.special-groups div:hover,
+.project-select:hover {
+    background-color: var(--bg-sidebar-active);
+    border-radius: 5px;
 }
 
 .project-select {
@@ -43,7 +52,7 @@ header {
 
 .project-heading {
     font-family: 'CabinetGrotesk-Bold';
-    user-select: none;
+    margin-bottom: 0.6rem;
 }
 
 .special-groups div:hover,
@@ -71,4 +80,63 @@ header {
 
 header, main {
     background-color: var(--bg-light);
+}
+
+.sidebar-bottom {
+    flex-shrink: 0;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    border-top: 0.1px solid var(--bg-sidebar-active);
+}
+
+.sidebar-bottom button {
+    height: 100%;
+    transition: all 0.2s;
+}
+
+.sidebar-bottom button:hover {
+    background-color: var(--bg-sidebar-active);
+}
+
+.new-proj-button {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.new-icon {
+    padding-left: 5%;
+    margin: 0 10px;
+    height: 70%;
+    width: 1.35rem;
+}
+
+.settings {
+    width: 30%;
+    padding-right: 5%;
+}
+
+.settings-icon {
+    width: 3rem;
+    height: 60%;
+    margin: 0 10px;
+}
+
+.sidebar button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+/* End of Sidebar components */
+/* Main display area */
+.task-diplay {
+    min-height: 100%;
+    grid-area: display;
 }
