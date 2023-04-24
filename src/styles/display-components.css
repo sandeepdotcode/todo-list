@@ -15,11 +15,24 @@
     align-items: flex-end;
     font-family: 'CabinetGrotesk-Bold';
     padding: 0 10%;
+    gap: 15px;
 }
 
 .title {
     height: calc(60px - 4%);
     vertical-align: middle;
+}
+
+.title-option {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.header .option-icon {
+    width: 2.5rem;
+    height: 2rem;
+    color: var(--blue-light);
 }
 
 /* Sidebar Components */
@@ -43,7 +56,6 @@
 
 .special-groups div,
 .project-select {
-    width: 90%;
     height: 2.2rem;
     display: flex;
     align-items: center;
