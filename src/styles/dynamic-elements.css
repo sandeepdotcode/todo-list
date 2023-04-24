@@ -1,0 +1,8 @@
+input[name="title"] {
+    all: unset;
+    font-size: 3rem;
+    caret-color: var(--blue-light);
+    vertical-align: text-bottom;
+    height: 60px;
+    width: 80%;
+}

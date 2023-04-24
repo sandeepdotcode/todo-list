@@ -17,6 +17,11 @@
     padding: 0 10%;
 }
 
+.title {
+    height: calc(60px - 4%);
+    vertical-align: middle;
+}
+
 /* Sidebar Components */
 .sidebar {
     grid-area: sidebar;
@@ -104,7 +109,7 @@ header, main {
     background-color: var(--bg-sidebar-active);
 }
 
-.new-proj-button {
+.new-proj-btn {
     flex: 1 0 auto;
     display: flex;
     justify-content: flex-start;
