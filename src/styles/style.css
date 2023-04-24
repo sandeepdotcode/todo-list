@@ -12,4 +12,9 @@
 body {
     min-height: 100vh;
     background-color: var(--bg-light);
+    font-family: 'CabinetGrotesk-Regular', sans-serif;
+}
+
+h1 {
+    font-size: 3rem;
 }

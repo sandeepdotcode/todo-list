@@ -2,14 +2,19 @@
     height: 100vh;
     display: grid;
     grid-template-columns: minmax(250px, 15fr) 85fr;
-    grid-template-rows: 60px 1fr;
+    grid-template-rows: 150px 1fr;
     grid-template-areas: "sidebar header"
                          "sidebar display";
     overflow: hidden;
 }
 
-header {
+/* Heder */
+.header {
     grid-area: header;
+    display: flex;
+    align-items: flex-end;
+    font-family: 'CabinetGrotesk-Bold';
+    padding: 0 10%;
 }
 
 /* Sidebar Components */
