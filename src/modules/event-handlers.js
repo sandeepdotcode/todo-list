@@ -11,9 +11,9 @@ function createNewProject() {
   setFocusToTexBox(input);
 
   input.addEventListener('keydown', (event) => {
-    if (event.keyCode === 27) {
+    if (event.code == 'Escape') {
       header.replaceWith(headerBackup);
-    } else if (event.keyCode === 13) {
+    } else if (event.code == 'Enter') {
       const title = input.value;
       pubSub.publish('projectAdded', title);
       header.innerHTML = `<h1 class="title">${title}</h1>
