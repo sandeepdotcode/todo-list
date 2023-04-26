@@ -16,14 +16,14 @@
         <nav class="sidebar">
             <div class="side-display">
                 <div class="special-groups">
-                    <div class="inbox">
+                    <div class="inbox" data-view="inbox">
                         <ion-icon name="file-tray" class="proj-icon inbox-icon" aria-hidden="true"></ion-icon>
                         Inbox
                     </div>
-                    <div class="today">
+                    <div class="today" data-view="today">
                         <ion-icon name="calendar-number-outline" class="proj-icon today-icon" aria-hidden="true"></ion-icon>
                         Today</div>
-                    <div class="this-week">
+                    <div class="this-week" data-view="week">
                         <ion-icon name="calendar" class="proj-icon week-icon" aria-hidden="true"></ion-icon>
                         This Week</div>
                 </div>
@@ -41,6 +41,8 @@
             </div>
 
         </nav>
-        <main class="task-display"></div>
+        <main class="project-display">
+            <div class="task-container"></div>
+        </div>
 </body>
 </html>

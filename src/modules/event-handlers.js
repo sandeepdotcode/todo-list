@@ -1,7 +1,22 @@
+import { getViewTaskList } from './app-controller';
 import pubSub from './pubsub';
+import { loadProjHeader, loadProject, loadView } from './ui-components';
 import { setFocusToTexBox } from './ui-helpers';
 
 let headerBackup = null;
+
+function changeView(event) {
+  const viewSelector = event.target.closest('.project-select, .today, .this-week, .inbox');
+  if (!viewSelector) return;
+  const view = viewSelector.getAttribute('data-view');
+  if (view === 'today' || view === 'week' || view === 'inbox') {
+    const taskList = getViewTaskList(view);
+    loadView(viewSelector.innerText, taskList);
+  } else if (view === 'project') {
+    const taskList = getViewTaskList('project', viewSelector.innerText);
+    loadProject(viewSelector.innerText, taskList);
+  }
+}
 
 function createNewProject() {
   const header = document.querySelector('header');
@@ -16,15 +31,16 @@ function createNewProject() {
     } else if (event.code == 'Enter') {
       const title = input.value;
       pubSub.publish('projectAdded', title);
-      header.innerHTML = `<h1 class="title">${title}</h1>
-      <div class="title-option"><ion-icon name="ellipsis-horizontal-outline" class="option-icon"></ion-icon></div>`;
+      loadProjHeader(title);
     }
   });
 }
 
 function applyInitialHandlers() {
   const newProjBtn = document.querySelector('.new-proj-btn');
+  const sideBar = document.querySelector('.side-display');
 
+  sideBar.addEventListener('click', changeView);
   newProjBtn.addEventListener('click', createNewProject);
 }
 
