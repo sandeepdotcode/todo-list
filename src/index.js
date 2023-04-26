@@ -1,7 +1,7 @@
 import {
-  addNewProject, addNewTask, addSubTask, changeDueDate, changeTaskPriority, changeView,
-  deleteSubTask, deleteTask, editTask, toggleShowDueOnly, toggleSubTask,
-  toggleTaskCompletion,
+  addNewProject, addNewTask, addSubTask, changeDueDate, changeTaskPriority,
+  deleteSubTask, deleteTask, displayTasksToConsole, editTask, getViewTaskList,
+  toggleShowDueOnly, toggleSubTask, toggleTaskCompletion,
 } from './modules/app-controller';
 import { initialLoad } from './modules/dom-controller';
 import './styles/reset.css';
@@ -9,17 +9,20 @@ import './styles/style.css';
 
 function todoListDisplay() {
   console.log('Inbox:');
-  changeView('inbox');
+
+  displayTasksToConsole(getViewTaskList('inbox'));
   console.log('Today\'s Tasks:');
-  changeView('today');
+  displayTasksToConsole(getViewTaskList('today'));
   console.log('This Week:');
-  changeView('week');
+  displayTasksToConsole(getViewTaskList('week'));
   addNewProject('Shopping List');
   addNewProject('Fitness');
   window.addNewTask = addNewTask;
   // addNewTask('Buy Fish', 'Buy some fish', 1, '2023-04-17', null, 'Shopping List');
-  // changeView('project', 'Shopping List');
-  window.changeView = changeView;
+  // getViewTaskList('project', 'Shopping List');
+  window.displayView = (name) => {
+    displayTasksToConsole(getViewTaskList(name));
+  };
   window.deleteTask = deleteTask;
   window.toggleTask = toggleTaskCompletion;
   window.toggleDue = toggleShowDueOnly;

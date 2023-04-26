@@ -10,9 +10,6 @@ import getSampleTasks from './sample-tasks';
 
 const projects = [];
 projects.push(createProject('inbox'));
-// currentView can be either of
-// today, week or project
-let currentView = 'today';
 let currentProject = projects[0];
 // Dictates whether completed tasks are returned or not
 let dueOnly = true;
@@ -148,7 +145,7 @@ function getWeeksTasks() {
   return tasks.sort((a, b) => compareAsc(a.dueDate, b.dueDate));
 }
 
-function displayTasks(tasks) {
+function displayTasksToConsole(tasks) {
   console.table(tasks.map((task) => ({
     name: task.name,
     description: task.description,
@@ -160,31 +157,30 @@ function displayTasks(tasks) {
   })));
 }
 
-function changeView(view, projectName = 'inbox') {
+function getViewTaskList(view, projectName = 'inbox') {
+  let taskList = null;
   switch (view) {
     case 'today':
-      currentView = 'today';
-      displayTasks(getDaysTasks());
+      taskList = getDaysTasks();
       break;
     case 'week':
-      currentView = 'week';
-      displayTasks(getWeeksTasks());
+      taskList = getWeeksTasks();
       break;
     case 'inbox':
     case 'project':
-      currentView = 'project';
       currentProject = projects[getProjectIndex(projectName)];
-      displayTasks(getCurrProjTasks());
+      taskList = getCurrProjTasks();
       break;
     default:
       console.log('changeView() Error: Invalid Argument!');
   }
+  return taskList;
 }
 
 export {
   addNewProject, deleteProject, addNewTask,
-  deleteTask, getDaysTasks, getWeeksTasks, displayTasks,
-  changeView, toggleShowDueOnly, toggleTaskCompletion,
+  deleteTask, getDaysTasks, getWeeksTasks, displayTasksToConsole,
+  getViewTaskList, toggleShowDueOnly, toggleTaskCompletion,
   addSubTask, toggleSubTask, deleteSubTask,
   changeTaskPriority, changeDueDate, editTask,
   getProjectNames,
