@@ -1,4 +1,4 @@
-import { formatDistanceToNowStrict } from 'date-fns';
+import { formatDistanceToNowStrict, isPast } from 'date-fns';
 import '../styles/display-components.css';
 import { getProjectNames } from './app-controller';
 import pubSub from './pubsub';
@@ -23,7 +23,11 @@ function loadProjHeader(projName) {
 
 function getDateDisplayNode(dueDate) {
   const dateDiv = document.createElement('div');
-  dateDiv.textContent = formatDistanceToNowStrict(dueDate);
+  if (isPast(dueDate)) {
+    dateDiv.innerHTML = `<ion-icon name="alert-outline"></ion-icon>overdue: ${formatDistanceToNowStrict(dueDate)}`;
+  } else {
+    dateDiv.textContent = formatDistanceToNowStrict(dueDate);
+  }
   return dateDiv;
 }
 

@@ -2,7 +2,7 @@ import createTask from './todos';
 
 function getSampleTasks() {
   const sampleProjects = [];
-  sampleProjects.push(createTask('Meditate', 'Meditate for 10 mins', 0, '2023-04-21'));
+  sampleProjects.push(createTask('Meditate', 'Meditate for 10 mins', 0, '2023-04-26'));
   sampleProjects.push(createTask('Make Bed', 'Make bed after waking up', 0, '2023-04-19'));
   sampleProjects.push(createTask('The Odin Project', 'Learn WebDev', 0, '2023-05-25'));
   sampleProjects.push(createTask('Walk', 'Go for a walk', 0, '2023-04-19'));
