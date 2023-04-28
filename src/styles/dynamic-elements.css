@@ -6,3 +6,87 @@ input[name="title"] {
     height: 60px;
     width: 80%;
 }
+
+.task-div {
+    display: flex;
+    padding: 0 1%;
+    transition: all 0.2s;
+}
+
+.task-div:hover {
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 0 5px 1px var(--bg-sidebar-active);
+    background-color: hsla(210, 20%, 98%, 0.849);
+}
+
+.task-main {
+    display: flex;
+    height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-family: 'CabinetGrotesk-Bold';
+}
+
+.task-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-check {
+    -webkit-appearance: none;
+    appearance: none;
+    font: inherit;
+    background-color: inherit;
+    cursor: pointer;
+    color: currentColor;
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 0.15rem solid currentColor;
+    border-radius: 0.15rem;
+    transform: translateY(-0.075rem);
+    position: relative;
+    display: grid;
+    place-content: center;
+}
+
+.task-check:focus-visible {
+    outline: max(2px, 0.15rem) solid var(--blue-light);
+    outline-offset: max(3px, 0.15rem);
+}
+
+/* to extend the range of checkbox to just outside it */
+.task-check:after {
+    content: "";
+    width: 35px;
+    height: 35px;
+}
+
+.task-check:before {
+    content: "";
+    width: 0.65rem;
+    height: 0.65rem;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1rem 1rem currentColor;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    position: absolute;
+    top: 15%;
+    left: 15%;
+}
+
+.task-check:checked:before {
+    transform: scale(1);
+}
+
+.date-div {
+    display: flex;
+    align-items: center;
+}
+
+.overdue {
+    color: var(--red-light);
+}

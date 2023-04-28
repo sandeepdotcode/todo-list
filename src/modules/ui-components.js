@@ -23,8 +23,10 @@ function loadProjHeader(projName) {
 
 function getDateDisplayNode(dueDate) {
   const dateDiv = document.createElement('div');
+  dateDiv.className = 'date-div';
   if (isPast(dueDate)) {
     dateDiv.innerHTML = `<ion-icon name="alert-outline"></ion-icon>overdue: ${formatDistanceToNowStrict(dueDate)}`;
+    dateDiv.classList.add('overdue');
   } else {
     dateDiv.textContent = formatDistanceToNowStrict(dueDate);
   }
@@ -34,9 +36,10 @@ function getDateDisplayNode(dueDate) {
 function getTaskNode(task) {
   const taskNode = document.createElement('div');
   taskNode.innerHTML = `<div class="task-main">
+  <div class="task-left">
   <input type="checkbox" name="isCompleted" class="task-check" ${task.isCompleted ? 'checked' : ''}>
   <h4 class="task-title">${task.name}</h4>
-  </div>`;
+  </div></div>`;
   taskNode.className = 'task-div';
   taskNode.setAttribute('data-time', task.getCreationTime);
   const taskMainDiv = taskNode.querySelector('.task-main');

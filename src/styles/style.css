@@ -1,9 +1,9 @@
 @import url(../assets/css/cabinet-grotesk.css);
 
 :root {
-    --bg-sidebar-light: #ccd0da;
+    --bg-sidebar-light: #dce0e8;
     --bg-sidebar-active: #acb0be;
-    --bg-light: #eff1f5;
+    --bg-light:  #eff1f5;   /* crust */
     --red-light: #d20f39;
     --blue-light: #209fb5;
     --teal-light: #179299;
