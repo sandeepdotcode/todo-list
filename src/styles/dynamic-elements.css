@@ -82,6 +82,24 @@ input[name="title"] {
     transform: scale(1);
 }
 
+.task-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.priority-div[data-priority='1'] {
+    color: var(--maroon-light);
+}
+
+.priority-div[data-priority='2'] {
+    color: var(--peach-light);
+}
+
+.priority-div[data-priority='3'] {
+    color: var(--blue-light);
+}
+
 .date-div {
     display: flex;
     align-items: center;

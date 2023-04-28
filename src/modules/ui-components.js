@@ -21,6 +21,14 @@ function loadProjHeader(projName) {
       <div class="title-option"><ion-icon name="ellipsis-horizontal-outline" class="option-icon"></ion-icon></div>`;
 }
 
+function getPriorityNode(priority) {
+  const priorityDiv = document.createElement('div');
+  priorityDiv.className = 'priority-div';
+  priorityDiv.setAttribute('data-priority', priority.toString());
+  priorityDiv.innerHTML = '<ion-icon name="flag"></ion-icon>';
+  return priorityDiv;
+}
+
 function getDateDisplayNode(dueDate) {
   const dateDiv = document.createElement('div');
   dateDiv.className = 'date-div';
@@ -39,11 +47,14 @@ function getTaskNode(task) {
   <div class="task-left">
   <input type="checkbox" name="isCompleted" class="task-check" ${task.isCompleted ? 'checked' : ''}>
   <h4 class="task-title">${task.name}</h4>
-  </div></div>`;
+  </div>
+  <div class="task-right"></div>
+  </div>`;
   taskNode.className = 'task-div';
   taskNode.setAttribute('data-time', task.getCreationTime);
-  const taskMainDiv = taskNode.querySelector('.task-main');
-  taskMainDiv.appendChild(getDateDisplayNode(task.dueDate));
+  const taskRightDiv = taskNode.querySelector('.task-right');
+  if (task.priority !== 0) taskRightDiv.appendChild(getPriorityNode(task.priority));
+  taskRightDiv.appendChild(getDateDisplayNode(task.dueDate));
   return taskNode;
 }
 
