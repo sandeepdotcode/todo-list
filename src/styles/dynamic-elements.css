@@ -9,6 +9,7 @@ input[name="title"] {
 
 .task-div {
     display: flex;
+    flex-direction: column;
     padding: 0 1%;
     transition: all 0.2s;
 }
@@ -21,6 +22,7 @@ input[name="title"] {
     background-color: hsla(210, 20%, 98%, 0.849);
 }
 
+/* main task area */
 .task-main {
     display: flex;
     height: 3rem;
@@ -43,8 +45,8 @@ input[name="title"] {
     background-color: inherit;
     cursor: pointer;
     color: currentColor;
-    width: 1.15rem;
-    height: 1.15rem;
+    width: 1rem;
+    height: 1rem;
     border: 0.15rem solid currentColor;
     border-radius: 0.15rem;
     transform: translateY(-0.075rem);
@@ -67,8 +69,8 @@ input[name="title"] {
 
 .task-check:before {
     content: "";
-    width: 0.65rem;
-    height: 0.65rem;
+    width: 0.50rem;
+    height: 0.50rem;
     transform: scale(0);
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1rem 1rem currentColor;
@@ -107,4 +109,11 @@ input[name="title"] {
 
 .overdue {
     color: var(--red-light);
+}
+
+/* end of main task area */
+
+.task-note {
+    margin: -0.2rem 0 1rem 2.25rem;
+    font-family: 'CabinetGrotesk-Medium';
 }

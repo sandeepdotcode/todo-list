@@ -48,8 +48,8 @@ function getTaskNode(task) {
   <input type="checkbox" name="isCompleted" class="task-check" ${task.isCompleted ? 'checked' : ''}>
   <h4 class="task-title">${task.name}</h4>
   </div>
-  <div class="task-right"></div>
-  </div>`;
+  <div class="task-right"></div></div>
+  <div class="task-note">${task.description}</div>`;
   taskNode.className = 'task-div';
   taskNode.setAttribute('data-time', task.getCreationTime());
   const taskRightDiv = taskNode.querySelector('.task-right');
