@@ -104,7 +104,12 @@ input[name="title"] {
 
 .date-div {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
+}
+
+.date-div ion-icon {
+    margin-right: -0.2rem;
 }
 
 .overdue {
