@@ -51,7 +51,7 @@ function getTaskNode(task) {
   <div class="task-right"></div>
   </div>`;
   taskNode.className = 'task-div';
-  taskNode.setAttribute('data-time', task.getCreationTime);
+  taskNode.setAttribute('data-time', task.getCreationTime());
   const taskRightDiv = taskNode.querySelector('.task-right');
   if (task.priority !== 0) taskRightDiv.appendChild(getPriorityNode(task.priority));
   taskRightDiv.appendChild(getDateDisplayNode(task.dueDate));
