@@ -9,7 +9,7 @@ import createProject from './projects';
 import getSampleTasks from './sample-tasks';
 
 const projects = [];
-projects.push(createProject('inbox'));
+projects.push(createProject('Inbox'));
 let currentProject = projects[0];
 // Dictates whether completed tasks are returned or not
 let dueOnly = true;
@@ -120,6 +120,10 @@ function getDaysTasks(date = new Date()) {
       const isTaskCompleted = (task.isCompleted !== dueOnly);
       const isToday = isSameDay(task.dueDate, date) && isTaskCompleted;
       return isOverDue || isToday;
+    }).map((task) => {
+      const tempTask = task;
+      tempTask.project = project.name;
+      return tempTask;
     });
     tasks.push(...tasksToday); // a.push(...b) stack overflows if b > 100000
   });
@@ -139,6 +143,10 @@ function getWeeksTasks() {
         end: endDate,
       }) && isTaskCompleted;
       return isOverDue || isThisWeek;
+    }).map((task) => {
+      const tempTask = task;
+      tempTask.project = project.name;
+      return tempTask;
     });
     tasks.push(...projTasks);
   });
@@ -157,7 +165,7 @@ function displayTasksToConsole(tasks) {
   })));
 }
 
-function getViewTaskList(view, projectName = 'inbox') {
+function getViewTaskList(view, projectName = 'Inbox') {
   let taskList = null;
   switch (view) {
     case 'today':
@@ -183,5 +191,5 @@ export {
   getViewTaskList, toggleShowDueOnly, toggleTaskCompletion,
   addSubTask, toggleSubTask, deleteSubTask,
   changeTaskPriority, changeDueDate, editTask,
-  getProjectNames,
+  getProjectNames, getTaskFromProject,
 };
