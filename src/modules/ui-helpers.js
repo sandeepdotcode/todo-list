@@ -10,4 +10,10 @@ function resetDisplay() {
   main.innerHTML = '<div class="task-container"></div>';
 }
 
-export { setFocusToTexBox, resetDisplay };
+function checkCurrentViewStrict() {
+  const title = document.querySelector('.title').innerHTML;
+  if (title === 'Today' || title === 'This Week') return true;
+  return false;
+}
+
+export { checkCurrentViewStrict, setFocusToTexBox, resetDisplay };

@@ -81,7 +81,9 @@ function loadView(name, taskList) {
   const taskContainer = document.querySelector('.task-container');
   loadProjHeader(name);
   taskList.forEach((task) => {
-    taskContainer.appendChild(getTaskNode(task));
+    const taskNode = getTaskNode(task);
+    taskNode.setAttribute('data-project', task.project);
+    taskContainer.appendChild(taskNode);
   });
 }
 

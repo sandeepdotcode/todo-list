@@ -1,9 +1,60 @@
-import { getViewTaskList } from './app-controller';
+import flatpickr from 'flatpickr';
+import { getTaskFromProject, getViewTaskList } from './app-controller';
 import pubSub from './pubsub';
 import { loadProjHeader, loadProject, loadView } from './ui-components';
-import { setFocusToTexBox } from './ui-helpers';
+import { checkCurrentViewStrict, setFocusToTexBox } from './ui-helpers';
 
 let headerBackup = null;
+let taskNodeBackup = null;
+let currentTask = null;
+
+function setupDateCtrl(ctrlNode) {
+  const ctrlLeft = ctrlNode.querySelector('.task-control-left');
+  if (!currentTask.dueDate) {
+    ctrlLeft.innerHTML = '<button type="button">Add Date</button>';
+  } else {
+    ctrlLeft.innerHTML = '<input type="text" class="date-control"></input>';
+    flatpickr('.date-control', {
+      enableTime: false,
+      altInput: true,
+      dateFormat: 'Y-m-d',
+      altFormat: 'F j, Y',
+      // dateFormat: 'Y-m-d H-i',
+      // altFormat: 'H:i F j, Y',
+      defaultDate: currentTask.dueDate,
+    });
+  }
+}
+
+function viewTask(event) {
+  if (event.target.nodeName === 'INPUT' || taskNodeBackup !== null) return;
+  const taskNode = event.target.closest('.task-div');
+  if (!taskNode) return;
+
+  taskNodeBackup = taskNode.cloneNode(true);
+  const taskName = taskNode.querySelector('.task-title').innerText;
+  const taskTime = Number(taskNode.getAttribute('data-time'));
+  const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
+  currentTask = getTaskFromProject(taskName, taskTime, projectName);
+
+  taskNode.classList.add('selected');
+  const bottomCtrls = document.createElement('div');
+  bottomCtrls.className = 'task-control';
+  bottomCtrls.innerHTML = `<div class="task-control-left"></div>
+  <div class="task-control-right">
+  <div class="proj-dropdown"><button type="button" class="dropdown-btn">${projectName}</button></div>
+  <ion-icon name="list-outline" class="list-control"></ion-icon><ion-icon name="flag-outline" class="priority-control"></ion-icon>
+  <div class="control-buttons"><button type="button">Cancel</button><button type="submit">Save</button></div>
+  </div>`;
+  taskNode.appendChild(bottomCtrls);
+  setupDateCtrl(bottomCtrls);
+}
+
+function applyMainListeners() {
+  const taskContainer = document.querySelector('.task-container');
+
+  taskContainer.addEventListener('click', viewTask);
+}
 
 function changeView(event) {
   const viewSelector = event.target.closest('.project-select, .today, .this-week, .inbox');
@@ -12,9 +63,11 @@ function changeView(event) {
   if (view === 'today' || view === 'week' || view === 'inbox') {
     const taskList = getViewTaskList(view);
     loadView(viewSelector.innerText, taskList);
+    applyMainListeners();
   } else if (view === 'project') {
     const taskList = getViewTaskList('project', viewSelector.innerText);
     loadProject(viewSelector.innerText, taskList);
+    applyMainListeners();
   }
 }
 
@@ -26,9 +79,9 @@ function createNewProject() {
   setFocusToTexBox(input);
 
   input.addEventListener('keydown', (event) => {
-    if (event.code == 'Escape') {
+    if (event.code === 'Escape') {
       header.replaceWith(headerBackup);
-    } else if (event.code == 'Enter') {
+    } else if (event.code === 'Enter') {
       const title = input.value;
       pubSub.publish('projectAdded', title);
       loadProjHeader(title);
@@ -44,4 +97,4 @@ function applyInitialHandlers() {
   newProjBtn.addEventListener('click', createNewProject);
 }
 
-export { applyInitialHandlers };
+export { applyInitialHandlers, applyMainListeners };

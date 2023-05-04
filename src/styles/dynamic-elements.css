@@ -1,3 +1,5 @@
+@import url(./flatpickr.css);
+
 input[name="title"] {
     all: unset;
     font-size: 3rem;
@@ -14,7 +16,8 @@ input[name="title"] {
     transition: all 0.2s;
 }
 
-.task-div:hover {
+.task-div:hover,
+.task-div.selected {
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
@@ -121,4 +124,31 @@ input[name="title"] {
 .task-note {
     margin: -0.2rem 0 1rem 2.25rem;
     font-family: 'CabinetGrotesk-Medium';
+}
+
+/* task edit */
+.task-control {
+    padding-left: 2.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-control-left {
+    width: 15%;
+}
+
+.task-control-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-control {
+    all: unset;
+    font-family: 'CabinetGrotesk-Bold';
+    font-size: 0.85rem;
+    width: 100%;
+    height: 1rem;
+    border-radius: 3px;
 }
