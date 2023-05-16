@@ -11,7 +11,8 @@ let currentTask = null;
 function setupDateCtrl(ctrlNode) {
   const ctrlLeft = ctrlNode.querySelector('.task-control-left');
   if (!currentTask.dueDate) {
-    ctrlLeft.innerHTML = '<button type="button">Add Date</button>';
+    ctrlLeft.innerHTML = `<button type="button">
+    <ion-icon name="calendar-number-outline" class="add-date-icon" aria-hidden="true"></ion-icon>Add Date</button>`;
   } else {
     ctrlLeft.innerHTML = '<input type="text" class="date-control"></input>';
     flatpickr('.date-control', {
@@ -42,9 +43,11 @@ function viewTask(event) {
   bottomCtrls.className = 'task-control';
   bottomCtrls.innerHTML = `<div class="task-control-left"></div>
   <div class="task-control-right">
-  <div class="proj-dropdown"><button type="button" class="dropdown-btn">${projectName}</button></div>
   <ion-icon name="list-outline" class="list-control"></ion-icon><ion-icon name="flag-outline" class="priority-control"></ion-icon>
-  <div class="control-buttons"><button type="button">Cancel</button><button type="submit">Save</button></div>
+  <div class="proj-dropdown"><button type="button" class="dropdown-btn">${projectName}
+  <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon></button></div>
+  <div class="control-button-div"><button type="button" class="cancel-btn">Cancel</button>
+  <button type="submit" class="save-btn">Save</button></div>
   </div>`;
   taskNode.appendChild(bottomCtrls);
   setupDateCtrl(bottomCtrls);

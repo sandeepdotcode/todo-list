@@ -2,3 +2,4 @@ node_modules/
 .vscode/
 dist/
 src/modules/temp.js
+README.md

@@ -122,16 +122,26 @@ input[name="title"] {
 /* end of main task area */
 
 .task-note {
-    margin: -0.2rem 0 1rem 2.25rem;
+    margin: -0.2rem 0 0.7rem 2.25rem;
     font-family: 'CabinetGrotesk-Medium';
 }
 
 /* task edit */
 .task-control {
+    font-family: 'CabinetGrotesk-Medium';
+    font-size: 0.9rem;
     padding-left: 2.25rem;
+    margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.task-control button {
+    all: unset;
+    cursor: pointer;
+    height: 1.8rem;
+    display: inline-block;
 }
 
 .task-control-left {
@@ -140,8 +150,46 @@ input[name="title"] {
 
 .task-control-right {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 0.1rem;
+}
+
+.task-control-right .dropdown-btn {
+    padding: 0 0.5rem;
+    width: auto;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dropdown-icon {
+    vertical-align: bottom;
+}
+
+.list-control, .priority-control {
+    margin: 0 0.4rem;
+}
+
+.control-button-div {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+}
+
+.control-button-div button {
+    text-align: center;
+    width: 60px;
+    border-radius: 5px;
+    background-color: var(--bg-sidebar-light);
+    transition: all 0.2s;
+}
+
+.control-button-div button:hover {
+    box-shadow: 0 0 1px 1px var(--bg-sidebar-light);
+}
+
+.control-button-div .save-btn {
+    background-color: var(--blue-light);
+    color: var(--bg-light);
 }
 
 .date-control {
