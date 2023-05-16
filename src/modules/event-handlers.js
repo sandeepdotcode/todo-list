@@ -27,9 +27,15 @@ function setupDateCtrl(ctrlNode) {
   }
 }
 
+function removeFlatpickr() {
+  const calendar = document.querySelector('.flatpickr-calendar');
+  calendar.remove();
+}
+
 function closeTask() {
   const taskNode = document.querySelector('.task-div.selected');
   taskNode.replaceWith(taskNodeBackup);
+  removeFlatpickr();
   taskNodeBackup = null;
 }
 
@@ -52,6 +58,7 @@ function addTaskListeners(taskNode) {
 
 function viewTask(event) {
   if (event.target.nodeName === 'INPUT') return;
+  if (event.target.closest('.selected')) return;
   if (taskNodeBackup !== null) closeTask();
   const taskNode = event.target.closest('.task-div');
   if (!taskNode) return;
