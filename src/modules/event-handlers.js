@@ -51,7 +51,8 @@ function addTaskListeners(taskNode) {
 }
 
 function viewTask(event) {
-  if (event.target.nodeName === 'INPUT' || taskNodeBackup !== null) return;
+  if (event.target.nodeName === 'INPUT') return;
+  if (taskNodeBackup !== null) closeTask();
   const taskNode = event.target.closest('.task-div');
   if (!taskNode) return;
 
