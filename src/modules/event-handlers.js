@@ -27,6 +27,30 @@ function setupDateCtrl(ctrlNode) {
   }
 }
 
+function closeTask() {
+  const taskNode = document.querySelector('.task-div.selected');
+  taskNode.replaceWith(taskNodeBackup);
+  taskNodeBackup = null;
+}
+
+function closeTaskFromEvents(event) {
+  if (event.type === 'click' && !document.querySelector('.task-div.selected')) {
+    taskNodeBackup = null;
+    return;
+  }
+  if (event.type === 'keyup' && event.code !== 'Escape') return;
+  if (event.type === 'click' && event.target.closest('.selected')) return;
+  console.log(event.target.closest('.selected'));
+  closeTask();
+  window.removeEventListener('keyup', closeTaskFromEvents);
+  window.removeEventListener('click', closeTaskFromEvents);
+}
+
+function addTaskListeners(taskNode) {
+  window.addEventListener('keyup', closeTaskFromEvents);
+  window.addEventListener('click', closeTaskFromEvents);
+}
+
 function viewTask(event) {
   if (event.target.nodeName === 'INPUT' || taskNodeBackup !== null) return;
   const taskNode = event.target.closest('.task-div');
@@ -51,6 +75,8 @@ function viewTask(event) {
   </div>`;
   taskNode.appendChild(bottomCtrls);
   setupDateCtrl(bottomCtrls);
+
+  addTaskListeners(taskNode);
 }
 
 function applyMainListeners() {
