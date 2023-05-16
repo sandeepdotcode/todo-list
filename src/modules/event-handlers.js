@@ -40,7 +40,6 @@ function closeTaskFromEvents(event) {
   }
   if (event.type === 'keyup' && event.code !== 'Escape') return;
   if (event.type === 'click' && event.target.closest('.selected')) return;
-  console.log(event.target.closest('.selected'));
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
   window.removeEventListener('click', closeTaskFromEvents);
