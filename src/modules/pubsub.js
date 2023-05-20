@@ -1,4 +1,4 @@
-import { addNewProject } from './app-controller';
+import { addNewProject, toggleTaskCompletion } from './app-controller';
 
 const pubSub = {
   events: {},
@@ -17,7 +17,7 @@ const pubSub = {
   publish(eventName, data) {
     if (this.events[eventName]) {
       this.events[eventName].forEach((func) => {
-        func(data);
+        if (Array.isArray(data)) { func(...data); } else { func(data); }
       });
     } else { console.log(data); }
   },
@@ -25,6 +25,7 @@ const pubSub = {
 
 (function addEvents() {
   pubSub.subscribe('projectAdded', addNewProject);
+  pubSub.subscribe('taskCheckClicked', toggleTaskCompletion);
 }());
 
 export default pubSub;
