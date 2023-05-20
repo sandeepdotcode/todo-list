@@ -65,8 +65,8 @@ function loadProject(name, taskList, description = '') {
   resetDisplay();
   loadProjHeader(name);
   const main = document.querySelector('main');
-  const taskContainer = document.querySelector('.task-container');
   const descDiv = document.createElement('div');
+  const taskContainer = document.querySelector('.task-container');
   descDiv.className = ('proj-description');
   descDiv.innerText = description || descLorem;
   main.prepend(descDiv);

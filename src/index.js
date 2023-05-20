@@ -3,7 +3,7 @@ import {
   deleteSubTask, deleteTask, displayTasksToConsole, editTask, getViewTaskList,
   toggleShowDueOnly, toggleSubTask, toggleTaskCompletion,
 } from './modules/app-controller';
-import { initialLoad } from './modules/dom-controller';
+import initialLoad from './modules/dom-controller';
 import './styles/reset.css';
 import './styles/style.css';
 

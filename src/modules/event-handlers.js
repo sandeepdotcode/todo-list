@@ -1,35 +1,43 @@
-import flatpickr from 'flatpickr';
 import { getTaskFromProject, getViewTaskList } from './app-controller';
 import pubSub from './pubsub';
 import { loadProjHeader, loadProject, loadView } from './ui-components';
-import { checkCurrentViewStrict, setFocusToTexBox } from './ui-helpers';
+import {
+  checkCurrentViewStrict, getCurrentView, getViewDisplayName,
+  makeViewSelectorActive, removeFlatpickr, removeTextStrike,
+  setFocusToTextBox, setupDateCtrl, strikeInnerText,
+} from './ui-helpers';
+import { getShowDueOnlyStatus } from './settings';
 
 let headerBackup = null;
 let taskNodeBackup = null;
 let currentTask = null;
 
-function setupDateCtrl(ctrlNode) {
-  const ctrlLeft = ctrlNode.querySelector('.task-control-left');
-  if (!currentTask.dueDate) {
-    ctrlLeft.innerHTML = `<button type="button">
-    <ion-icon name="calendar-number-outline" class="add-date-icon" aria-hidden="true"></ion-icon>Add Date</button>`;
-  } else {
-    ctrlLeft.innerHTML = '<input type="text" class="date-control"></input>';
-    flatpickr('.date-control', {
-      enableTime: false,
-      altInput: true,
-      dateFormat: 'Y-m-d',
-      altFormat: 'F j, Y',
-      // dateFormat: 'Y-m-d H-i',
-      // altFormat: 'H:i F j, Y',
-      defaultDate: currentTask.dueDate,
-    });
+function renderViewOrProject(viewType, viewOrProjName = null) {
+  if (viewType === 'view') {
+    const taskList = getViewTaskList(viewOrProjName);
+    loadView(getViewDisplayName(viewOrProjName), taskList);
+  } else if (viewType === 'project') {
+    const taskList = getViewTaskList('project', viewOrProjName);
+    loadProject(viewOrProjName, taskList);
   }
 }
 
-function removeFlatpickr() {
-  const calendar = document.querySelector('.flatpickr-calendar');
-  calendar.remove();
+function reRenderView() {
+  const [viewType, viewOrProjName] = getCurrentView();
+  renderViewOrProject(viewType, viewOrProjName);
+}
+
+function changeView(event) {
+  const viewSelector = event.target.closest('.project-select, .today, .this-week, .inbox');
+  if (!viewSelector) return;
+  const view = viewSelector.getAttribute('data-view');
+
+  makeViewSelectorActive(viewSelector);
+  if (view === 'project') {
+    renderViewOrProject(view, viewSelector.innerText);
+  } else {
+    renderViewOrProject('view', view);
+  }
 }
 
 function closeTask() {
@@ -81,29 +89,58 @@ function viewTask(event) {
   <button type="submit" class="save-btn">Save</button></div>
   </div>`;
   taskNode.appendChild(bottomCtrls);
-  setupDateCtrl(bottomCtrls);
+  setupDateCtrl(bottomCtrls, currentTask);
 
   addTaskListeners(taskNode);
 }
 
-function applyMainListeners() {
-  const taskContainer = document.querySelector('.task-container');
+function handleTickedTaskDiv(taskNode) {
+  strikeInnerText(taskNode.querySelector('h4.task-title'));
+  strikeInnerText(taskNode.querySelector('.task-note'));
+  const taskRight = taskNode.querySelector('.task-right');
+  taskRight.classList.add('hidden');
 
-  taskContainer.addEventListener('click', viewTask);
+  if (getShowDueOnlyStatus()) {
+    setTimeout(() => { taskNode.remove(); }, 800);
+  }
 }
 
-function changeView(event) {
-  const viewSelector = event.target.closest('.project-select, .today, .this-week, .inbox');
-  if (!viewSelector) return;
-  const view = viewSelector.getAttribute('data-view');
-  if (view === 'today' || view === 'week' || view === 'inbox') {
-    const taskList = getViewTaskList(view);
-    loadView(viewSelector.innerText, taskList);
-    applyMainListeners();
-  } else if (view === 'project') {
-    const taskList = getViewTaskList('project', viewSelector.innerText);
-    loadProject(viewSelector.innerText, taskList);
-    applyMainListeners();
+function handleUntickedTask(taskNode) {
+  if (getShowDueOnlyStatus()) {
+    reRenderView();
+  } else {
+    removeTextStrike(taskNode.querySelector('h4.task-title'));
+    removeTextStrike(taskNode.querySelector('.task-note'));
+    const taskRight = taskNode.querySelector('.task-right');
+    taskRight.classList.remove('hidden');
+  }
+}
+
+function clickTaskCheck(event) {
+  if (!event.target.classList.contains('task-check') && !event.target.classList.contains('task-check')) return;
+  const taskNode = event.target.closest('.task-div');
+  const name = taskNode.querySelector('h4.task-title').innerText;
+  const creationTime = Number(taskNode.getAttribute('data-time'));
+  let project = null;
+  if (checkCurrentViewStrict()) {
+    project = taskNode.getAttribute('data-project');
+  } else {
+    project = document.querySelector('h1.title').innerText;
+  }
+  pubSub.publish('taskCheckClicked', [name, creationTime, project]);
+
+  if (event.target.checked) {
+    handleTickedTaskDiv(taskNode);
+    if (taskNodeBackup) {
+      taskNodeBackup.querySelector('.task-check').checked = true;
+      handleTickedTaskDiv(taskNodeBackup);
+    }
+  } else {
+    handleUntickedTask(taskNode);
+    if (taskNodeBackup) {
+      taskNodeBackup.querySelector('.task-check').checked = false;
+      handleUntickedTask(taskNodeBackup);
+    }
   }
 }
 
@@ -112,7 +149,7 @@ function createNewProject() {
   if (header.firstElementChild.className === 'title') { headerBackup = header.cloneNode(true); }
   header.innerHTML = '<input type="text" name="title" placeholder="New Project" autocomplete="off">';
   const input = document.querySelector('input[name="title"]');
-  setFocusToTexBox(input);
+  setFocusToTextBox(input);
 
   input.addEventListener('keydown', (event) => {
     if (event.code === 'Escape') {
@@ -128,9 +165,15 @@ function createNewProject() {
 function applyInitialHandlers() {
   const newProjBtn = document.querySelector('.new-proj-btn');
   const sideBar = document.querySelector('.side-display');
+  const taskContainer = document.querySelector('.task-container');
 
   sideBar.addEventListener('click', changeView);
   newProjBtn.addEventListener('click', createNewProject);
+
+  taskContainer.addEventListener('click', viewTask);
+  taskContainer.addEventListener('click', clickTaskCheck);
 }
 
-export { applyInitialHandlers, applyMainListeners };
+export {
+  applyInitialHandlers, renderViewOrProject,
+};

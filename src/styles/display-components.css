@@ -70,6 +70,11 @@
     border-radius: 5px;
 }
 
+.active {
+    background-color: var(--bg-sidebar-active);
+    border-radius: 5px;
+}
+
 .project-select {
     padding-left: 5%;
 }

@@ -1,13 +1,14 @@
-import { applyInitialHandlers, applyMainListeners } from './event-handlers';
-import { loadMainDisplay, loadView } from './ui-components';
+import { applyInitialHandlers, renderViewOrProject } from './event-handlers';
+import { loadMainDisplay } from './ui-components';
 import '../styles/dynamic-elements.css';
-import { getViewTaskList } from './app-controller';
+import { getHomeViewName, getHomeViewType } from './settings';
+import { markViewActive } from './ui-helpers';
 
 function initialLoad() {
   loadMainDisplay();
   applyInitialHandlers();
-  loadView('Inbox', getViewTaskList('inbox'));
-  applyMainListeners();
+  renderViewOrProject(getHomeViewType(), getHomeViewName());
+  markViewActive(getHomeViewName());
 }
 
-export { initialLoad };
+export default initialLoad;

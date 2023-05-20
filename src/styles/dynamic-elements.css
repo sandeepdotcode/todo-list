@@ -200,3 +200,12 @@ input[name="title"] {
     height: 1rem;
     border-radius: 3px;
 }
+
+.striked {
+    text-decoration: line-through;
+    opacity: 0.35;
+}
+
+.hidden {
+    display: none;
+}
