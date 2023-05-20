@@ -2,7 +2,7 @@ import { formatDistanceToNowStrict, isPast } from 'date-fns';
 import '../styles/display-components.css';
 import { getProjectNames } from './app-controller';
 import pubSub from './pubsub';
-import { resetDisplay } from './ui-helpers';
+import { markViewActive, resetDisplay } from './ui-helpers';
 
 function addProjToSidebar(name) {
   const projContainer = document.querySelector('.project-container');
@@ -13,6 +13,7 @@ function addProjToSidebar(name) {
   const nameText = document.createTextNode(name);
   projDiv.appendChild(nameText);
   projContainer.appendChild(projDiv);
+  markViewActive(name);
 }
 
 function loadProjHeader(projName) {

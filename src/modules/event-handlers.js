@@ -4,6 +4,7 @@ import { loadProjHeader, loadProject, loadView } from './ui-components';
 import {
   checkCurrentViewStrict, getCurrentView, getViewDisplayName,
   makeViewSelectorActive, removeFlatpickr, removeTextStrike,
+  resetDisplay,
   setFocusToTextBox, setupDateCtrl, strikeInnerText,
 } from './ui-helpers';
 import { getShowDueOnlyStatus } from './settings';
@@ -157,6 +158,7 @@ function createNewProject() {
     } else if (event.code === 'Enter') {
       const title = input.value;
       pubSub.publish('projectAdded', title);
+      resetDisplay();
       loadProjHeader(title);
     }
   });
