@@ -6,6 +6,7 @@ import {
 import initialLoad from './modules/dom-controller';
 import './styles/reset.css';
 import './styles/style.css';
+import './styles/sliders-dropdowns.css';
 
 function todoListDisplay() {
   console.log('Inbox:');

@@ -46,6 +46,7 @@
     user-select: none;
     position: relative;
     box-shadow: 2px 0 6px -4px black;
+    z-index: 11;
 }
 
 .side-display {
@@ -183,9 +184,60 @@ header, main {
 
 
 /* Settings area */
-/* .settings-container {
+.settings-container {
     grid-area: display;
     background-color: var(--bg-light);
     z-index: 10;
     height: 100%;
-} */
+    padding: 3rem 15% 2rem;
+}
+
+.settings-container > div {
+    padding: 0 25% 0 3%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+}
+
+.due-only-status {
+    font-family: 'CabinetGrotesk-Bold';
+    font-size: 1.3rem;
+    color: var(--red-light);
+}
+
+.due-only-status.due-yes  {
+    color: var(--text-light);
+}
+
+.settings-container > div > span {
+    font-family: 'CabinetGrotesk-Medium';
+    font-size: 1.1rem;
+}
+
+div.settings-buttons {
+    display: flex;
+    margin-top: 2rem;
+    padding: 0 calc(25% + 0.5rem) 0 3%;
+    justify-content: flex-end;
+    user-select: none;
+}
+
+.settings-close-btn {
+    all: unset;
+    background-color: var(--red-light);
+    color: var(--bg-light);
+    height: 2rem;
+    width: 5rem;
+    border-radius: 5px;
+    font-family: 'CabinetGrotesk-Bold';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.settings-close-btn:hover {
+    opacity: 0.8;
+}

@@ -167,12 +167,31 @@ function createNewProject() {
   });
 }
 
+function showSettings() {
+  const settingsContainer = document.querySelector('.settings-container');
+  settingsContainer.classList.remove('hidden');
+}
+
+function closeSettings() {
+  const settingsContainer = document.querySelector('.settings-container');
+  settingsContainer.classList.add('hidden');
+}
+
+function activateSettingsHandlers() {
+  const closeBtn = document.querySelector('.settings-close-btn');
+
+  closeBtn.addEventListener('click', closeSettings);
+}
+
 function applyInitialHandlers() {
   const newProjBtn = document.querySelector('.new-proj-btn');
   const sideBar = document.querySelector('.side-display');
   const taskContainer = document.querySelector('.task-container');
+  const settingsBtn = document.querySelector('.settings-btn');
 
   sideBar.addEventListener('click', changeView);
+  settingsBtn.addEventListener('click', showSettings);
+  activateSettingsHandlers();
   newProjBtn.addEventListener('click', createNewProject);
 
   taskContainer.addEventListener('click', viewTask);

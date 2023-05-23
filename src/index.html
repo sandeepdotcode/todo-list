@@ -34,13 +34,27 @@
             </div>
             <div class="sidebar-bottom">
                 <button class="new-proj-btn"><ion-icon class="new-icon" name="add"></ion-icon> New Project</button>
-                <button class="settings">
+                <button class="settings-btn">
                     <ion-icon class= "settings-icon" name="cog-outline"></ion-icon>
                 </button>
             </div>
         </nav>
         <main class="project-display">
             <div class="task-container"></div>
+        </main>
+        <div class="settings-container">
+            <div class="show-due-div"><span>Show finished tasks: </span>
+                <div class="due-slider slider-div">
+                    <label for="due-only-switch" class="toggle-switch">
+                        <input type="checkbox" id="due-only-switch">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="due-only-status">no</span>
+                </div>
+            </div>
+            <div class="settings-buttons">
+                <button class="settings-close-btn hidden">Close</button>
+            </div>
         </div>
 </body>
 </html>
