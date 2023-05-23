@@ -142,7 +142,7 @@ header, main {
     width: 1.35rem;
 }
 
-.settings {
+.settings-btn {
     width: 30%;
     padding-right: 5%;
 }
@@ -180,3 +180,12 @@ header, main {
 .task-container {
     padding: 0 20px;
 }
+
+
+/* Settings area */
+/* .settings-container {
+    grid-area: display;
+    background-color: var(--bg-light);
+    z-index: 10;
+    height: 100%;
+} */
