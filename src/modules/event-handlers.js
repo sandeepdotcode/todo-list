@@ -86,7 +86,7 @@ function viewTask(event) {
   <ion-icon name="list-outline" class="list-control"></ion-icon><ion-icon name="flag-outline" class="priority-control"></ion-icon>
   <div class="proj-dropdown"><button type="button" class="dropdown-btn">${projectName}
   <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon></button></div>
-  <div class="control-button-div"><button type="button" class="cancel-btn">Cancel</button>
+  <div class="control-button-div hidden"><button type="button" class="cancel-btn">Cancel</button>
   <button type="submit" class="save-btn">Save</button></div>
   </div>`;
   taskNode.appendChild(bottomCtrls);
