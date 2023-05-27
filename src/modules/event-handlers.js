@@ -13,6 +13,23 @@ let headerBackup = null;
 let taskNodeBackup = null;
 let currentTask = null;
 
+function showSettings() {
+  const settingsContainer = document.querySelector('.settings-container');
+  settingsContainer.classList.remove('hidden');
+  document.querySelector('header').innerHTML = '<h1 class="title">Settings</h1>';
+}
+
+function closeSettings() {
+  const settingsContainer = document.querySelector('.settings-container');
+  settingsContainer.classList.add('hidden');
+  const [viewOrProj, viewOrProjName] = getCurrentView();
+  if (viewOrProj === 'view') {
+    loadProjHeader(getViewDisplayName(viewOrProjName));
+  } else {
+    loadProjHeader(viewOrProjName);
+  }
+}
+
 function renderViewOrProject(viewType, viewOrProjName = null) {
   if (viewType === 'view') {
     const taskList = getViewTaskList(viewOrProjName);
@@ -32,7 +49,9 @@ function changeView(event) {
   const viewSelector = event.target.closest('.project-select, .today, .this-week, .inbox');
   if (!viewSelector) return;
   const view = viewSelector.getAttribute('data-view');
+  const titleNode = document.querySelector('.title');
 
+  if (titleNode && titleNode.textContent === 'Settings') closeSettings();
   makeViewSelectorActive(viewSelector);
   if (view === 'project') {
     renderViewOrProject(view, viewSelector.innerText);
@@ -165,16 +184,6 @@ function createNewProject() {
       loadProjHeader(title);
     }
   });
-}
-
-function showSettings() {
-  const settingsContainer = document.querySelector('.settings-container');
-  settingsContainer.classList.remove('hidden');
-}
-
-function closeSettings() {
-  const settingsContainer = document.querySelector('.settings-container');
-  settingsContainer.classList.add('hidden');
 }
 
 function activateSettingsHandlers() {
