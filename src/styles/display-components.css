@@ -204,6 +204,7 @@ header, main {
     font-family: 'CabinetGrotesk-Bold';
     font-size: 1.3rem;
     color: var(--red-light);
+    width: 2rem;
 }
 
 .due-only-status.due-yes  {

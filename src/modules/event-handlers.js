@@ -1,4 +1,4 @@
-import { getTaskFromProject, getViewTaskList } from './app-controller';
+import { getTaskFromProject, getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
 import { loadProjHeader, loadProject, loadView } from './ui-components';
 import {
@@ -7,7 +7,7 @@ import {
   resetDisplay,
   setFocusToTextBox, setupDateCtrl, strikeInnerText,
 } from './ui-helpers';
-import { getShowDueOnlyStatus } from './settings';
+import { getShowDueOnlyStatus, setShowDueOnly, unsetShowDueOnly } from './settings';
 
 let headerBackup = null;
 let taskNodeBackup = null;
@@ -15,6 +15,8 @@ let currentTask = null;
 
 function showSettings() {
   const settingsContainer = document.querySelector('.settings-container');
+  const dueOnlySwitch = document.getElementById('due-only-switch');
+  dueOnlySwitch.checked = !getShowDueOnlyStatus();
   settingsContainer.classList.remove('hidden');
   document.querySelector('header').innerHTML = '<h1 class="title">Settings</h1>';
 }
@@ -186,9 +188,30 @@ function createNewProject() {
   });
 }
 
+function dueOnlyClicked() {
+  const dueOnlySwitch = document.getElementById('due-only-switch');
+  const status = document.querySelector('.due-only-status');
+
+  // checked represents - Show finished - dueOnly = false
+  if (dueOnlySwitch.checked) {
+    unsetShowDueOnly();
+    status.textContent = 'yes';
+    status.classList.add('due-yes');
+  } else {
+    setShowDueOnly();
+    status.textContent = 'no';
+    status.classList.remove('due-yes');
+  }
+  toggleShowDueOnly();
+  reRenderView();
+  document.querySelector('header').innerHTML = '<h1 class="title">Settings</h1>';
+}
+
 function activateSettingsHandlers() {
   const closeBtn = document.querySelector('.settings-close-btn');
+  const dueOnlySwitch = document.getElementById('due-only-switch');
 
+  dueOnlySwitch.addEventListener('click', dueOnlyClicked);
   closeBtn.addEventListener('click', closeSettings);
 }
 
