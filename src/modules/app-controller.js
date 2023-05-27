@@ -112,12 +112,16 @@ function getCurrProjTasks() {
   return currentProject.getTasks();
 }
 
+function checkDueOnlyandTaskCompletion(taskCompleted) {
+  return ((dueOnly === true && !taskCompleted) || !(dueOnly === true));
+}
+
 function getDaysTasks(date = new Date()) {
   const tasks = [];
   projects.forEach((project) => {
     const tasksToday = project.getTasks().filter((task) => {
       const isOverDue = isPast(task.dueDate) && !task.isCompleted;
-      const isTaskCompleted = (task.isCompleted !== dueOnly);
+      const isTaskCompleted = checkDueOnlyandTaskCompletion(task.isCompleted);
       const isToday = isSameDay(task.dueDate, date) && isTaskCompleted;
       return isOverDue || isToday;
     }).map((task) => {
@@ -137,7 +141,7 @@ function getWeeksTasks() {
   projects.forEach((project) => {
     const projTasks = project.getTasks().filter((task) => {
       const isOverDue = isPast(task.dueDate) && !task.isCompleted;
-      const isTaskCompleted = (task.isCompleted !== dueOnly);
+      const isTaskCompleted = checkDueOnlyandTaskCompletion(task.isCompleted);
       const isThisWeek = isWithinInterval(task.dueDate, {
         start: startDate,
         end: endDate,
