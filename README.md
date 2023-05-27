@@ -27,3 +27,6 @@ CSS:
 - [ ] Delete tasks
 - [ ] Drag to reposition tasks & projects
 - [ ] Dark mode
+- [ ] Undo Task Completion and deletion
+- [ ] customise date-picker
+- [ ] 
