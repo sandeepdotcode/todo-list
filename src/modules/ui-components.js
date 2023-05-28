@@ -43,6 +43,30 @@ function getDateDisplayNode(dueDate) {
   return dateDiv;
 }
 
+function getCheckItemDiv(item) {
+  const checkItemDiv = document.createElement('div');
+  checkItemDiv.className = 'checklist-item-div';
+  checkItemDiv.innerHTML = `<input type="checkbox" name="subcheck" class="subtask-check"
+  ${item.getCompletionStatus() ? 'checked' : ''}>
+  <span class="checklist-item-text">${item.text}</span>`;
+
+  if (item.getCompletionStatus()) {
+    const textSpan = checkItemDiv.querySelector('.checklist-item-text');
+    strikeInnerText(textSpan);
+  }
+  return checkItemDiv;
+}
+
+function getCheckListDiv(checkList) {
+  const checkDiv = document.createElement('div');
+  checkDiv.className = 'checklist-div';
+
+  checkList.forEach((subTask) => {
+    checkDiv.appendChild(getCheckItemDiv(subTask));
+  });
+  return checkDiv;
+}
+
 function getTaskNode(task) {
   const taskNode = document.createElement('div');
   taskNode.innerHTML = `<div class="task-main">
@@ -52,6 +76,9 @@ function getTaskNode(task) {
   </div>
   <div class="task-right"></div></div>
   <div class="task-note">${task.description}</div>`;
+  if (task.checkList !== null) {
+    taskNode.appendChild(getCheckListDiv(task.checkList));
+  }
   taskNode.className = 'task-div';
   taskNode.setAttribute('data-time', task.getCreationTime());
   const taskRightDiv = taskNode.querySelector('.task-right');

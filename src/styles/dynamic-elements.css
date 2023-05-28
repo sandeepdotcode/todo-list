@@ -126,6 +126,68 @@ input[name="title"] {
     font-family: 'CabinetGrotesk-Medium';
 }
 
+.checklist-div {
+    margin: -0.2rem 2.25rem 0.7rem 2.75rem;
+    font-family: 'CabinetGrotesk-Regular';
+}
+
+.checklist-item-div {
+    padding: 0.3rem 0.5rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.checklist-item-div:hover {
+    background-color: var(--bg-sidebar-light);
+}
+
+.checklist-item-div + .checklist-item-div {
+    border-top: solid 0.1px var(--bg-sidebar-light);
+}
+
+.checklist-item-text {
+    margin-left: 0.5rem;
+}
+
+.subtask-check {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: inherit;
+    cursor: pointer;
+    color: currentColor;
+    width: 1rem;
+    height: 1rem;
+    border: 0.15rem solid currentColor;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+}
+
+.subtask-check:focus-visible {
+    outline: max(2px, 0.15rem) solid var(--blue-light);
+    outline-offset: max(3px, 0.15rem);
+}
+
+.subtask-check:before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    background-color: currentColor;
+}
+
+.subtask-check:checked {
+    opacity: 0.6;
+}
+
+.subtask-check:checked::before {
+    transform: scale(1);
+}
+
 /* task edit */
 .task-control {
     font-family: 'CabinetGrotesk-Medium';
