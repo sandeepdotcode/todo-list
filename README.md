@@ -24,6 +24,8 @@ CSS:
 
 ## **Features to be added**:
 
+- [ ] Refactor code
+- [ ] Make the site more accessible
 - [ ] Delete tasks
 - [ ] Drag to reposition tasks & projects
 - [ ] Dark mode
