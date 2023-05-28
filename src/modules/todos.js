@@ -1,5 +1,22 @@
 import { endOfDay } from 'date-fns';
 
+function createSubTask(text) {
+  let isDone = false;
+  const toggleCompletion = () => {
+    isDone = !isDone;
+  };
+  const getCompletionStatus = () => isDone;
+  return {
+    text,
+    toggleCompletion,
+    getCompletionStatus,
+  };
+}
+
+function checkListify(checkListArray) {
+  return checkListArray.map((item) => createSubTask(item));
+}
+
 class Task {
   #creationTimeStamp;
 
@@ -8,7 +25,7 @@ class Task {
     this.description = description;
     this.priority = priority; // 0 - no priority, 1 - high, 2 - med, 3 - low
     this.dueDate = endOfDay(new Date(dateString));
-    this.checkList = checkList || null;
+    this.checkList = checkList;
     this.isCompleted = false;
 
     this.#creationTimeStamp = Date.now();
@@ -16,7 +33,7 @@ class Task {
 
   addToCheckList(text) {
     if (!this.checkList) this.checkList = [];
-    this.checkList.push({ text, isDone: false });
+    this.checkList.push(createSubTask(text));
   }
 
   getCheckListIndex(text) {
@@ -24,7 +41,16 @@ class Task {
   }
 
   getAllCheckStatus() {
-    return this.checkList.reduce((status, item) => status && item.isDone, true);
+    return this.checkList.reduce((status, item) => status && item.getCompletionStatus(), true);
+  }
+
+  getCheckListItemStatus(name) {
+    const index = this.getCheckListIndex(name);
+    if (index === -1) {
+      console.log('checkListItem not found, cannot check status!');
+      return null;
+    }
+    return this.checkList[index].getCompletionStatus();
   }
 
   toggleCheckCompletion(text) {
@@ -49,7 +75,7 @@ class Task {
 }
 
 function createTask(name, description, priority, dueDate, checkList) {
-  const modCheckList = (!checkList ? null : checkList.map((text) => ({ text, isDone: false })));
+  const modCheckList = Array.isArray(checkList) ? checkListify(checkList) : null;
   return new Task(name, description, priority, dueDate, modCheckList);
 }
 
