@@ -2,7 +2,8 @@ import { formatDistanceToNowStrict, isPast } from 'date-fns';
 import '../styles/display-components.css';
 import { getProjectNames } from './app-controller';
 import pubSub from './pubsub';
-import { markViewActive, resetDisplay } from './ui-helpers';
+import { markViewActive, resetDisplay, strikeInnerText } from './ui-helpers';
+import { getShowDueOnlyStatus } from './settings';
 
 function addProjToSidebar(name) {
   const projContainer = document.querySelector('.project-container');
@@ -56,6 +57,13 @@ function getTaskNode(task) {
   const taskRightDiv = taskNode.querySelector('.task-right');
   if (task.priority !== 0) taskRightDiv.appendChild(getPriorityNode(task.priority));
   taskRightDiv.appendChild(getDateDisplayNode(task.dueDate));
+  if (!getShowDueOnlyStatus() && task.isCompleted) {
+    const taskName = taskNode.querySelector('.task-title');
+    const taskDesc = taskNode.querySelector('.task-note');
+    strikeInnerText(taskName);
+    strikeInnerText(taskDesc);
+    taskRightDiv.classList.add('hidden');
+  }
   return taskNode;
 }
 
