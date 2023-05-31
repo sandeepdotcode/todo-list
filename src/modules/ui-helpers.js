@@ -100,8 +100,8 @@ function unHideNode(node) {
 }
 
 function removeFlatpickr() {
-  const calendar = document.querySelector('.flatpickr-calendar');
-  calendar.remove();
+  const calendar = document.querySelector('.date-control')._flatpickr;
+  calendar.destroy();
 }
 
 export {
