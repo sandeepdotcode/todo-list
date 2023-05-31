@@ -1,8 +1,9 @@
-import { getTaskFromProject, getViewTaskList, toggleShowDueOnly } from './app-controller';
+import { getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
 import { loadProjHeader, loadProject, loadView } from './ui-components';
 import {
-  checkCurrentViewStrict, getCurrentView, getViewDisplayName,
+  checkCurrentViewStrict, getCurrentView, getTaskFromTaskNode, getViewDisplayName,
+  hideNode,
   makeViewSelectorActive, removeFlatpickr, removeTextStrike,
   resetDisplay,
   setFocusToTextBox, setupDateCtrl, strikeInnerText,
@@ -62,11 +63,25 @@ function changeView(event) {
   }
 }
 
+function syncActiveNodeAndBackup() {
+  const activeNode = document.querySelector('.task-div.selected');
+  taskNodeBackup = activeNode.cloneNode(true);
+  const taskRight = taskNodeBackup.querySelector('.task-right');
+  const taskControls = taskNodeBackup.querySelector('.task-control');
+  const dateDiv = taskControls.querySelector('.date-div');
+  taskRight.appendChild(dateDiv);
+
+  taskNodeBackup.removeChild(taskControls);
+  taskNodeBackup.classList.remove('selected');
+}
+
 function closeTask() {
   const taskNode = document.querySelector('.task-div.selected');
+  if (!taskNode.classList.contains('.editing')) syncActiveNodeAndBackup();
   taskNode.replaceWith(taskNodeBackup);
   removeFlatpickr();
   taskNodeBackup = null;
+  currentTask = null;
 }
 
 function closeTaskFromEvents(event) {
@@ -89,32 +104,37 @@ function addTaskListeners(taskNode) {
 function viewTask(event) {
   if (event.target.nodeName === 'INPUT') return;
   if (event.target.closest('.selected')) return;
+  if (event.target.closest('.checklist-div')) return;
   if (taskNodeBackup !== null) closeTask();
   const taskNode = event.target.closest('.task-div');
   if (!taskNode) return;
 
   taskNodeBackup = taskNode.cloneNode(true);
-  const taskName = taskNode.querySelector('.task-title').innerText;
-  const taskTime = Number(taskNode.getAttribute('data-time'));
   const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
-  currentTask = getTaskFromProject(taskName, taskTime, projectName);
+  currentTask = getTaskFromTaskNode(taskNode);
 
   taskNode.classList.add('selected');
   const bottomCtrls = document.createElement('div');
   bottomCtrls.className = 'task-control';
+  const priorityDiv = taskNode.querySelector('.priority-div');
+  const priority = priorityDiv ? priorityDiv.getAttribute('data-priority') : '';
+  const checkListDiv = taskNode.querySelector('.checklist-div');
+  if (priorityDiv) hideNode(priorityDiv);
   bottomCtrls.innerHTML = `<div class="task-control-left"></div>
   <div class="task-control-right">
-  <button class="checklist-btn"><ion-icon name="list-outline" class="list-control"></ion-icon></button>
-  <div class="dropdown-div"><button class="priority-btn">
-    <ion-icon name="flag-outline" class="priority-control"></ion-icon>
+  ${checkListDiv ? '' : '<button class="checklist-btn"><ion-icon name="list-outline" class="list-control"></ion-icon></button>'}
+  <div class="dropdown-div"><button class="priority-btn" data-priority=${priority}>
+    <ion-icon name="flag-outline" class="priority-control"></ion-icon><span>${priority}
   </button></div>
   <div class="proj-dropdown dropdown-div"><button type="button" class="dropdown-btn">${projectName}
   <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon></button></div>
-  <div class="control-button-div hidden"><button type="button" class="cancel-btn">Cancel</button>
+  <div class="control-button-div"><button type="button" class="cancel-btn">Cancel</button>
   <button type="submit" class="save-btn">Save</button></div>
   </div>`;
   taskNode.appendChild(bottomCtrls);
   setupDateCtrl(bottomCtrls, currentTask);
+  const leftControls = taskNode.querySelector('.task-control-left');
+  leftControls.appendChild(taskNode.querySelector('.date-div'));
 
   addTaskListeners(taskNode);
 }
@@ -167,6 +187,26 @@ function clickTaskCheck(event) {
       handleUntickedTask(taskNodeBackup);
     }
   }
+}
+
+function clickSubTaskCheck(event) {
+  const subTaskDiv = event.target.closest('.checklist-item-div');
+  if (!subTaskDiv) return;
+  const taskDiv = event.target.closest('.task-div');
+  if (taskDiv.classList.contains('selected') && event.target.nodeName !== 'INPUT') return;
+  const input = subTaskDiv.querySelector('input');
+  if (event.target.nodeName !== 'INPUT') {
+    input.checked = !input.checked;
+  }
+  const subTaskText = subTaskDiv.querySelector('.checklist-item-text');
+  if (input.checked) { strikeInnerText(subTaskText); } else { removeTextStrike(subTaskText); }
+  currentTask = getTaskFromTaskNode(taskDiv);
+  currentTask.toggleCheckCompletion(subTaskText.innerText);
+  if (currentTask.isCompleted) {
+    taskDiv.querySelector('.task-check').checked = true;
+    handleTickedTaskDiv(taskDiv);
+  }
+  currentTask = null;
 }
 
 function createNewProject() {
@@ -228,6 +268,7 @@ function applyInitialHandlers() {
 
   taskContainer.addEventListener('click', viewTask);
   taskContainer.addEventListener('click', clickTaskCheck);
+  taskContainer.addEventListener('click', clickSubTaskCheck);
 }
 
 export {

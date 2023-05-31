@@ -1,4 +1,5 @@
 import flatpickr from 'flatpickr';
+import { getTaskFromProject } from './app-controller';
 
 function setFocusToTextBox(node) {
   node.focus();
@@ -83,6 +84,21 @@ function setupDateCtrl(ctrlNode, currentTask) {
   }
 }
 
+function getTaskFromTaskNode(taskNode) {
+  const taskName = taskNode.querySelector('.task-title').innerText;
+  const taskTime = Number(taskNode.getAttribute('data-time'));
+  const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
+  return getTaskFromProject(taskName, taskTime, projectName);
+}
+
+function hideNode(node) {
+  node.classList.add('hidden');
+}
+
+function unHideNode(node) {
+  node.classList.remove('hidden');
+}
+
 function removeFlatpickr() {
   const calendar = document.querySelector('.flatpickr-calendar');
   calendar.remove();
@@ -92,5 +108,5 @@ export {
   checkCurrentViewStrict, getCurrentView, strikeInnerText, removeTextStrike,
   setFocusToTextBox, resetDisplay, getViewDisplayName,
   makeViewSelectorActive, markViewActive, setupDateCtrl,
-  removeFlatpickr,
+  removeFlatpickr, getTaskFromTaskNode, hideNode, unHideNode,
 };

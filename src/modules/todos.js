@@ -55,9 +55,11 @@ class Task {
 
   toggleCheckCompletion(text) {
     const item = this.checkList[this.getCheckListIndex(text)];
-    item.isDone = !item.isDone;
+    item.toggleCompletion();
 
-    this.isCompleted = this.getAllCheckStatus();
+    if (!this.isCompleted) {
+      this.isCompleted = this.getAllCheckStatus();
+    }
   }
 
   removeFromCheckList(text) {

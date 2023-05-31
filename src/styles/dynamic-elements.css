@@ -93,15 +93,18 @@ input[name="title"] {
     gap: 0.6rem;
 }
 
-.priority-div[data-priority='1'] {
+.priority-div[data-priority='1'],
+.priority-btn[data-priority='1'] {
     color: var(--maroon-light);
 }
 
-.priority-div[data-priority='2'] {
+.priority-div[data-priority='2'],
+.priority-btn[data-priority='2'] {
     color: var(--peach-light);
 }
 
-.priority-div[data-priority='3'] {
+.priority-div[data-priority='3'],
+.priority-btn[data-priority='3']{
     color: var(--blue-light);
 }
 
@@ -109,6 +112,7 @@ input[name="title"] {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    font-family: 'CabinetGrotesk-Bold';
 }
 
 .date-div ion-icon {
@@ -206,14 +210,29 @@ input[name="title"] {
     display: inline-block;
 }
 
-.task-control-left {
-    width: 15%;
+.task-control-left .date-control {
+    width: 28%;
 }
 
+.task-control-left,
 .task-control-right {
     display: flex;
     align-items: center;
     gap: 0.1rem;
+}
+
+.priority-btn[data-priority] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.priority-btn > span {
+    font-family: 'CabinetGrotesk-Bold';
+    font-size: 0.95rem;
+    position: relative;
+    top: 0.05rem;
+    left: -0.2rem;
 }
 
 .task-control-right .dropdown-btn {
@@ -232,9 +251,13 @@ input[name="title"] {
 }
 
 .control-button-div {
-    display: flex;
+    display: none;
     gap: 0.4rem;
     justify-content: center;
+}
+
+.editing .control-button-div {
+    display: flex;
 }
 
 .control-button-div button {
@@ -259,8 +282,10 @@ input[name="title"] {
     font-family: 'CabinetGrotesk-Bold';
     font-size: 0.85rem;
     width: 100%;
-    height: 1rem;
+    height: 1.2rem;
     border-radius: 3px;
+    position: relative;
+    top: 0.1rem;
 }
 
 .striked {
