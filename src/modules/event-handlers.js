@@ -90,6 +90,7 @@ function closeTaskFromEvents(event) {
     return;
   }
   if (event.type === 'keyup' && event.code !== 'Escape') return;
+  if (event.type === 'click' && event.target.closest('.flatpickr-calendar')) return;
   if (event.type === 'click' && event.target.closest('.selected')) return;
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
