@@ -210,10 +210,6 @@ input[name="title"] {
     display: inline-block;
 }
 
-.task-control-left .date-control {
-    width: 28%;
-}
-
 .task-control-left,
 .task-control-right {
     display: flex;
@@ -281,7 +277,7 @@ input[name="title"] {
     all: unset;
     font-family: 'CabinetGrotesk-Bold';
     font-size: 0.85rem;
-    width: 100%;
+    width: 8rem;
     height: 1.2rem;
     border-radius: 3px;
     position: relative;
