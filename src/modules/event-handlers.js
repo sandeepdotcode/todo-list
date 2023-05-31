@@ -6,7 +6,7 @@ import {
   hideNode,
   makeViewSelectorActive, removeFlatpickr, removeTextStrike,
   resetDisplay,
-  setFocusToTextBox, setupDateCtrl, strikeInnerText,
+  setFocusToTextBox, setupDateCtrl, strikeInnerText, unHideNode,
 } from './ui-helpers';
 import { getShowDueOnlyStatus, setShowDueOnly, unsetShowDueOnly } from './settings';
 
@@ -70,6 +70,7 @@ function syncActiveNodeAndBackup() {
   const taskControls = taskNodeBackup.querySelector('.task-control');
   const dateDiv = taskControls.querySelector('.date-div');
   taskRight.appendChild(dateDiv);
+  unHideNode(taskRight);
 
   taskNodeBackup.removeChild(taskControls);
   taskNodeBackup.classList.remove('selected');
@@ -122,7 +123,7 @@ function viewTask(event) {
   const priorityDiv = taskNode.querySelector('.priority-div');
   const priority = priorityDiv ? priorityDiv.getAttribute('data-priority') : '';
   const checkListDiv = taskNode.querySelector('.checklist-div');
-  if (priorityDiv) hideNode(priorityDiv);
+  hideNode(taskNode.querySelector('.task-right'));
   bottomCtrls.innerHTML = `<div class="task-control-left"></div>
   <div class="task-control-right">
   ${checkListDiv ? '' : '<button class="checklist-btn"><ion-icon name="list-outline" class="list-control"></ion-icon></button>'}
