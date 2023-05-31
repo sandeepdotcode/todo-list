@@ -92,6 +92,8 @@ function closeTaskFromEvents(event) {
   if (event.type === 'keyup' && event.code !== 'Escape') return;
   if (event.type === 'click' && event.target.closest('.flatpickr-calendar')) return;
   if (event.type === 'click' && event.target.closest('.selected')) return;
+  const taskCheck = document.querySelector('.selected .task-check');
+  if (getShowDueOnlyStatus() && taskCheck && event.type === 'click' && taskCheck.checked) return; // Prevent .selected task persisting after completion
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
   window.removeEventListener('click', closeTaskFromEvents);
@@ -147,6 +149,8 @@ function handleTickedTaskDiv(taskNode) {
   taskRight.classList.add('hidden');
 
   if (getShowDueOnlyStatus()) {
+    currentTask = null;
+    taskNodeBackup = null;
     setTimeout(() => { taskNode.remove(); }, 800);
   }
 }
