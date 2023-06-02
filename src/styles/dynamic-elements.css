@@ -25,6 +25,33 @@ input[name="title"] {
     background-color: hsla(210, 20%, 98%, 0.849);
 }
 
+.task-title,
+.task-note,
+.checklist-item-text {
+    padding-right: 2rem;
+    height: 1.3rem;
+    display: flex;
+    align-items: flex-end;
+}
+
+.selected .task-title:hover,
+.selected .task-note:hover,
+.selected .checklist-item-text:hover {
+    cursor: text;
+}
+
+.task-title[contenteditable],
+.task-note[contenteditable],
+.checklist-item-text[contenteditable] {
+    text-decoration: underline var(--blue-light) 2px;
+}
+
+.selected .task-title:focus-visible
+.selected .task-note:focus-visible,
+.selected .checklist-item-text:focus-visible {
+    outline: var(--blue-light) solid 2px;
+}
+
 /* main task area */
 .task-main {
     display: flex;
@@ -94,17 +121,20 @@ input[name="title"] {
 }
 
 .priority-div[data-priority='1'],
-.priority-btn[data-priority='1'] {
+.priority-btn[data-priority='1'],
+a[data-priority="1"] {
     color: var(--maroon-light);
 }
 
 .priority-div[data-priority='2'],
-.priority-btn[data-priority='2'] {
+.priority-btn[data-priority='2'],
+a[data-priority="2"] {
     color: var(--peach-light);
 }
 
 .priority-div[data-priority='3'],
-.priority-btn[data-priority='3']{
+.priority-btn[data-priority='3'],
+a[data-priority="3"] {
     color: var(--blue-light);
 }
 
@@ -231,19 +261,29 @@ input[name="title"] {
     left: -0.2rem;
 }
 
-.task-control-right .dropdown-btn {
+.task-control-right .change-proj-btn {
     padding: 0 0.5rem;
     width: auto;
     text-align: center;
     vertical-align: middle;
 }
 
-.dropdown-icon {
+.change-proj-icon {
     vertical-align: bottom;
 }
 
 .list-control, .priority-control {
     margin: 0 0.4rem;
+}
+
+.priority-btn:hover, .change-proj-btn:hover,
+.checklist-btn:hover, button.active-drop {
+    background-color: var(--bg-sidebar-light);
+    border-radius: 3px;
+}
+
+.editing .checklist-btn:hover {
+    cursor: not-allowed;
 }
 
 .control-button-div {

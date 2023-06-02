@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
-import { getTaskFromProject } from './app-controller';
+import { getProjectNames, getTaskFromProject } from './app-controller';
+import { editDate } from './event-handlers';
 
 function setFocusToTextBox(node) {
   node.focus();
@@ -80,6 +81,7 @@ function setupDateCtrl(ctrlNode, currentTask) {
       // dateFormat: 'Y-m-d H-i',
       // altFormat: 'H:i F j, Y',
       defaultDate: currentTask.dueDate,
+      onChange: editDate,
     });
   }
 }
@@ -99,6 +101,29 @@ function unHideNode(node) {
   node.classList.remove('hidden');
 }
 
+function createTaskDropdowns() {
+  const taskNode = document.querySelector('.selected');
+  const priorityDropDiv = taskNode.querySelector('.priority-dropdown');
+  const projDropDiv = taskNode.querySelector('.proj-dropdown');
+
+  priorityDropDiv.innerHTML += `<div class="dropdown-list priority-drop-list hidden">
+  <a class="drop-link" data-priority="0"><ion-icon name="flag" class="priority-option"></ion-icon>0 - No Priority</a>
+  <a class="drop-link" data-priority="1"><ion-icon name="flag" class="priority-option"></ion-icon>1 - High Priority</a>
+  <a class="drop-link" data-priority="2"><ion-icon name="flag" class="priority-option"></ion-icon>2 - Med Priority</a>
+  <a class="drop-link" data-priority="3"><ion-icon name="flag" class="priority-option"></ion-icon>3 - Low Priority</a></div>`;
+
+  projDropDiv.innerHTML += `<div class="dropdown-list proj-drop-list hidden">
+  <a class="drop-link">Inbox</a>
+  </div>`;
+  const projList = projDropDiv.querySelector('.dropdown-list');
+  getProjectNames().forEach((projName) => {
+    const link = document.createElement('a');
+    link.textContent = projName;
+    link.className = 'drop-link';
+    projList.appendChild(link);
+  });
+}
+
 function removeFlatpickr() {
   const calendar = document.querySelector('.date-control')._flatpickr;
   calendar.destroy();
@@ -109,4 +134,5 @@ export {
   setFocusToTextBox, resetDisplay, getViewDisplayName,
   makeViewSelectorActive, markViewActive, setupDateCtrl,
   removeFlatpickr, getTaskFromTaskNode, hideNode, unHideNode,
+  createTaskDropdowns,
 };

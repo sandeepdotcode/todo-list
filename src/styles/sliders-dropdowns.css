@@ -55,3 +55,38 @@ input:focus + .slider {
 input:checked + .slider::before {
     transform: translateX(1.45rem);
 }
+
+.dropdown-div {
+    position: relative;
+}
+
+.dropdown-list {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--select-light);
+    padding: 0.1rem;
+    gap: 0.1rem;
+    border-radius: 5px;
+    border: 2px solid var(--bg-sidebar-light);
+    z-index: 20;
+}
+
+.dropdown-list a {
+    text-decoration: none;
+    font-family: 'CabinetGrotesk-Bold';
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    padding: 0 0.5rem;
+    min-width: max-content;
+}
+
+.dropdown-list a:hover {
+    background-color: var(--bg-sidebar-light);
+}
+
+.dropdown-list a + a {
+    border-top: 1px solid var(--bg-sidebar-light);
+}

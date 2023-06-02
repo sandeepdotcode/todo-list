@@ -10,6 +10,7 @@
     --teal-light: #179299;
     --peach-light: #fe640b;
     --text-light: #4c4f69;
+    --select-light: hsla(210, 20%, 98%, 1);
 }
 
 body {
@@ -21,4 +22,8 @@ body {
 
 h1 {
     font-size: 3rem;
+}
+
+a {
+    color: inherit;
 }

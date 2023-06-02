@@ -1,9 +1,12 @@
+import { endOfDay } from 'date-fns';
 import { getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
-import { loadProjHeader, loadProject, loadView } from './ui-components';
 import {
-  checkCurrentViewStrict, getCurrentView, getTaskFromTaskNode, getViewDisplayName,
-  hideNode,
+  getDateDisplayNode, loadProjHeader, loadProject, loadView,
+} from './ui-components';
+import {
+  checkCurrentViewStrict, createTaskDropdowns, getCurrentView,
+  getTaskFromTaskNode, getViewDisplayName, hideNode,
   makeViewSelectorActive, removeFlatpickr, removeTextStrike,
   resetDisplay,
   setFocusToTextBox, setupDateCtrl, strikeInnerText, unHideNode,
@@ -78,9 +81,9 @@ function syncActiveNodeAndBackup() {
 
 function closeTask() {
   const taskNode = document.querySelector('.task-div.selected');
+  removeFlatpickr();
   if (!taskNode.classList.contains('.editing')) syncActiveNodeAndBackup();
   taskNode.replaceWith(taskNodeBackup);
-  removeFlatpickr();
   taskNodeBackup = null;
   currentTask = null;
 }
@@ -95,20 +98,101 @@ function closeTaskFromEvents(event) {
   if (event.type === 'click' && event.target.closest('.selected')) return;
   const taskCheck = document.querySelector('.selected .task-check');
   if (getShowDueOnlyStatus() && taskCheck && event.type === 'click' && taskCheck.checked) return; // Prevent .selected task persisting after completion
+  if (document.querySelector('.active-drop')) return; // Prevent closing when dropdowns are active
+  if (document.querySelector('.selected').classList.contains('editing')) return;
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
   window.removeEventListener('click', closeTaskFromEvents);
 }
 
+function editText(event) {
+  const { target } = event;
+  const taskNode = document.querySelector('.selected');
+  const title = taskNode.querySelector('.task-title');
+  const taskNote = taskNode.querySelector('.task-note');
+  const taskCheckList = taskNode.querySelectorAll('.checklist-item-div');
+
+  let targetInCheckList = false;
+  const targetCheckDiv = target.closest('.checklist-item-div');
+  taskCheckList.forEach((itemDiv) => {
+    if (targetCheckDiv && itemDiv === targetCheckDiv) { targetInCheckList = true; }
+  });
+  if (target !== title && target !== taskNote && !targetInCheckList) return;
+
+  taskNode.classList.add('editing');
+  target.setAttribute('contenteditable', true);
+}
+
+function editDate(selectedDates, dateStr, instance) {
+  const taskNode = document.querySelector('.selected');
+  const date = endOfDay(selectedDates[0]);
+  const dateDiv = taskNode.querySelector('.date-div');
+
+  taskNode.classList.add('editing');
+  dateDiv.replaceWith(getDateDisplayNode(date));
+}
+
+function selectPriority(event) {
+  if (!event.target.closest('.drop-link')) return;
+  const taskNode = document.querySelector('.selected');
+  const priorityBtn = taskNode.querySelector('.priority-btn');
+
+  taskNode.classList.add('editing');
+  const selectedPriorityValue = event.target.getAttribute('data-priority');
+  const priorityBtnSpan = priorityBtn.querySelector('span');
+
+  priorityBtn.setAttribute('data-priority', selectedPriorityValue);
+  priorityBtnSpan.textContent = selectedPriorityValue;
+}
+
+function selectNewProj(event) {
+  if (!event.target.closest('.drop-link')) return;
+  const taskNode = document.querySelector('.selected');
+  const projBtn = taskNode.querySelector('.change-proj-btn');
+
+  taskNode.classList.add('editing');
+  const selectedProject = event.target.innerText;
+  const projBtnSpan = projBtn.querySelector('span');
+  projBtnSpan.textContent = selectedProject;
+}
+
+function closeDropdowns(event) {
+  const closestBtn = event.target.closest('.drop-btn');
+  if (closestBtn && closestBtn.matches('.active-drop')) return;
+
+  const dropBtns = document.querySelectorAll('.active-drop');
+  dropBtns.forEach((btn) => {
+    const dropList = btn.nextElementSibling;
+    hideNode(dropList);
+    btn.classList.remove('active-drop');
+  });
+}
+
+function toggleDropdown(event) {
+  const dropBtn = event.target.closest('.drop-btn');
+  if (!dropBtn) return;
+  if (!dropBtn.matches('.active-drop')) closeDropdowns(event);
+  const dropList = dropBtn.nextElementSibling;
+  dropList.classList.toggle('hidden');
+  dropBtn.classList.toggle('active-drop');
+}
+
 function addTaskListeners(taskNode) {
+  const rightControls = taskNode.querySelector('.task-control-right');
+
   window.addEventListener('keyup', closeTaskFromEvents);
   window.addEventListener('click', closeTaskFromEvents);
+  taskNode.addEventListener('click', editText);
+  rightControls.addEventListener('click', toggleDropdown);
+  rightControls.querySelector('.priority-drop-list').addEventListener('click', selectPriority);
+  rightControls.querySelector('.proj-drop-list').addEventListener('click', selectNewProj);
 }
 
 function viewTask(event) {
   if (event.target.nodeName === 'INPUT') return;
   if (event.target.closest('.selected')) return;
   if (event.target.closest('.checklist-div')) return;
+  if (document.querySelector('.editing')) return;
   if (taskNodeBackup !== null) closeTask();
   const taskNode = event.target.closest('.task-div');
   if (!taskNode) return;
@@ -127,15 +211,16 @@ function viewTask(event) {
   bottomCtrls.innerHTML = `<div class="task-control-left"></div>
   <div class="task-control-right">
   ${checkListDiv ? '' : '<button class="checklist-btn"><ion-icon name="list-outline" class="list-control"></ion-icon></button>'}
-  <div class="dropdown-div"><button class="priority-btn" data-priority=${priority}>
+  <div class="dropdown-div priority-dropdown"><button class="priority-btn drop-btn" data-priority=${priority}>
     <ion-icon name="flag-outline" class="priority-control"></ion-icon><span>${priority}
   </button></div>
-  <div class="proj-dropdown dropdown-div"><button type="button" class="dropdown-btn">${projectName}
-  <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon></button></div>
+  <div class="proj-dropdown dropdown-div"><button type="button" class="change-proj-btn drop-btn"><span>${projectName}</span>
+  <ion-icon name="chevron-down-outline" class="change-proj-icon"></ion-icon></button></div>
   <div class="control-button-div"><button type="button" class="cancel-btn">Cancel</button>
   <button type="submit" class="save-btn">Save</button></div>
   </div>`;
   taskNode.appendChild(bottomCtrls);
+  createTaskDropdowns();
   setupDateCtrl(bottomCtrls, currentTask);
   const leftControls = taskNode.querySelector('.task-control-left');
   leftControls.appendChild(taskNode.querySelector('.date-div'));
@@ -275,8 +360,9 @@ function applyInitialHandlers() {
   taskContainer.addEventListener('click', viewTask);
   taskContainer.addEventListener('click', clickTaskCheck);
   taskContainer.addEventListener('click', clickSubTaskCheck);
+  window.addEventListener('click', closeDropdowns);
 }
 
 export {
-  applyInitialHandlers, renderViewOrProject,
+  applyInitialHandlers, renderViewOrProject, editDate,
 };

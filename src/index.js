@@ -1,3 +1,4 @@
+import './styles/sliders-dropdowns.css';
 import {
   addNewProject, addNewTask, addSubTask, changeDueDate, changeTaskPriority,
   deleteSubTask, deleteTask, displayTasksToConsole, editTask, getViewTaskList,
@@ -6,7 +7,6 @@ import {
 import initialLoad from './modules/dom-controller';
 import './styles/reset.css';
 import './styles/style.css';
-import './styles/sliders-dropdowns.css';
 
 function todoListDisplay() {
   console.log('Inbox:');
@@ -30,7 +30,7 @@ function todoListDisplay() {
   window.addCheck = addSubTask;
   window.togglCheck = toggleSubTask;
   window.deleteCheck = deleteSubTask;
-  addNewTask('Buy Fish', 'Buy some fish', 1, '2023-04-17', null, 'Shopping List');
+  addNewTask('Buy Groceries', 'Purchase Groceries for the week', 1, '2023-04-17', ['Go to Shop', 'Buy Vegetables', 'Buy Fruits', 'Buy '], 'Shopping List');
   window.changePrio = changeTaskPriority;
   window.changeDue = changeDueDate;
   window.editTask = editTask;
