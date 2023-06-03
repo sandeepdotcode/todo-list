@@ -27,7 +27,7 @@ class Project {
 
   removeTask(taskName, creationTime) {
     const index = this.findTaskIndex(taskName, creationTime);
-    this.taskList.splice(index, 1);
+    return this.taskList.splice(index, 1);
   }
 }
 
