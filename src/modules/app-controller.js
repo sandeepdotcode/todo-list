@@ -72,10 +72,32 @@ function changeDueDate(taskName, creationTimeStamp, newDateStr, projectName = nu
   task.dueDate = new Date(newDateStr);
 }
 
-function editTask(taskName, creationTimeStamp, newName, newDescrip, projectName = null) {
+function moveToProject(taskDetails, newProjectName) {
+  const [taskName, creationTimeStamp, projectName] = taskDetails;
+  const project = getProject(projectName);
+  const newProject = getProject(newProjectName);
+  const taskArray = project.removeTask(taskName, creationTimeStamp);
+  const task = taskArray[0];
+  newProject.addTask(task);
+}
+
+function editTask(
+  taskDetails,
+  newName,
+  newDescrip,
+  newChecklist,
+  newDate,
+  newPriority,
+  newProjectName = null,
+) {
+  const [taskName, creationTimeStamp, projectName] = taskDetails;
   const task = getTaskFromProject(taskName, creationTimeStamp, projectName);
-  task.name = newName;
-  task.description = newDescrip;
+  if (newName) { task.name = newName; }
+  if (newDescrip) { task.description = newDescrip; }
+  if (newChecklist.length) { task.modifyCheckList(newChecklist); }
+  if (newDate) { task.dueDate = newDate; }
+  if (newPriority) { task.priority = newPriority; }
+  if (newProjectName) { moveToProject(taskDetails, newProjectName); }
 }
 
 function deleteTask(name, creationTimeStamp, projectName = null) {
