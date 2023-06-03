@@ -17,7 +17,7 @@ input[name="title"] {
 }
 
 .task-div:hover,
-.task-div.selected {
+.task-div.selected-task {
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
@@ -34,9 +34,9 @@ input[name="title"] {
     align-items: flex-end;
 }
 
-.selected .task-title:hover,
-.selected .task-note:hover,
-.selected .checklist-item-text:hover {
+.selected-task .task-title:hover,
+.selected-task .task-note:hover,
+.selected-task .checklist-item-text:hover {
     cursor: text;
 }
 
@@ -46,9 +46,9 @@ input[name="title"] {
     text-decoration: underline var(--blue-light) 2px;
 }
 
-.selected .task-title:focus-visible
-.selected .task-note:focus-visible,
-.selected .checklist-item-text:focus-visible {
+.selected-task .task-title:focus-visible
+.selected-task .task-note:focus-visible,
+.selected-task .checklist-item-text:focus-visible {
     outline: var(--blue-light) solid 2px;
 }
 

@@ -102,7 +102,7 @@ function unHideNode(node) {
 }
 
 function createTaskDropdowns() {
-  const taskNode = document.querySelector('.selected');
+  const taskNode = document.querySelector('.selected-task');
   const priorityDropDiv = taskNode.querySelector('.priority-dropdown');
   const projDropDiv = taskNode.querySelector('.proj-dropdown');
 
@@ -124,8 +124,8 @@ function createTaskDropdowns() {
   });
 }
 
-function removeFlatpickr() {
-  const calendar = document.querySelector('.date-control')._flatpickr;
+function removeFlatpickr(taskNode) {
+  const calendar = taskNode.querySelector('.date-control')._flatpickr;
   calendar.destroy();
 }
 

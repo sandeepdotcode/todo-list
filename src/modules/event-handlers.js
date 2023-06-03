@@ -67,7 +67,7 @@ function changeView(event) {
 }
 
 function syncActiveNodeAndBackup() {
-  const activeNode = document.querySelector('.task-div.selected');
+  const activeNode = document.querySelector('.selected-task');
   taskNodeBackup = activeNode.cloneNode(true);
   const taskRight = taskNodeBackup.querySelector('.task-right');
   const taskControls = taskNodeBackup.querySelector('.task-control');
@@ -76,12 +76,12 @@ function syncActiveNodeAndBackup() {
   unHideNode(taskRight);
 
   taskNodeBackup.removeChild(taskControls);
-  taskNodeBackup.classList.remove('selected');
+  taskNodeBackup.classList.remove('selected-task');
 }
 
 function closeTask() {
-  const taskNode = document.querySelector('.task-div.selected');
-  removeFlatpickr();
+  const taskNode = document.querySelector('.selected-task');
+  removeFlatpickr(taskNode);
   if (!taskNode.classList.contains('.editing')) syncActiveNodeAndBackup();
   taskNode.replaceWith(taskNodeBackup);
   taskNodeBackup = null;
@@ -89,25 +89,53 @@ function closeTask() {
 }
 
 function closeTaskFromEvents(event) {
-  if (event.type === 'click' && !document.querySelector('.task-div.selected')) {
+  if (event.type === 'click' && !document.querySelector('.selected-task')) {
     taskNodeBackup = null;
     return;
   }
   if (event.type === 'keyup' && event.code !== 'Escape') return;
   if (event.type === 'click' && event.target.closest('.flatpickr-calendar')) return;
-  if (event.type === 'click' && event.target.closest('.selected')) return;
-  const taskCheck = document.querySelector('.selected .task-check');
-  if (getShowDueOnlyStatus() && taskCheck && event.type === 'click' && taskCheck.checked) return; // Prevent .selected task persisting after completion
+  if (event.type === 'click' && event.target.closest('.selected-task')) return;
+  const taskCheck = document.querySelector('.selected-task .task-check');
+  if (getShowDueOnlyStatus() && taskCheck && event.type === 'click' && taskCheck.checked) return; // Prevent .selected-task persisting after completion
   if (document.querySelector('.active-drop')) return; // Prevent closing when dropdowns are active
-  if (document.querySelector('.selected').classList.contains('editing')) return;
+  if (document.querySelector('.selected-task').classList.contains('editing')) return;
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
   window.removeEventListener('click', closeTaskFromEvents);
 }
 
+function cancelTaskChanges(event) {
+  const taskNode = event.target.closest('.selected-task');
+  const titleBkp = taskNodeBackup.querySelector('.task-title');
+  const noteBkp = taskNodeBackup.querySelector('.task-note');
+  const checkBkp = taskNodeBackup.querySelector('.checklist-div');
+
+  taskNode.querySelector('.task-title').replaceWith(titleBkp.cloneNode(true));
+  taskNode.querySelector('.task-note').replaceWith(noteBkp.cloneNode(true));
+  const checkDiv = taskNode.querySelector('.checklist-div');
+  if (checkDiv) {
+    checkDiv.replaceWith(checkBkp.cloneNode(true));
+  }
+
+  const fp = taskNode.querySelector('.date-control')._flatpickr;
+  const priorityBtn = taskNode.querySelector('.priority-btn');
+  const priorityBtnSpan = priorityBtn.querySelector('span');
+  const projBtn = taskNode.querySelector('.change-proj-btn');
+  const projBtnSpan = projBtn.querySelector('span');
+  const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
+  fp.setDate(currentTask.dueDate);
+  priorityBtn.setAttribute('data-priority', currentTask.priority);
+  priorityBtnSpan.textContent = (currentTask.priority === 0 ? '' : currentTask.priority);
+  projBtnSpan.textContent = projectName;
+
+  taskNode.classList.remove('editing');
+}
+
 function editText(event) {
   const { target } = event;
-  const taskNode = document.querySelector('.selected');
+  const taskNode = target.closest('.selected-task');
+  if (!taskNode) return;
   const title = taskNode.querySelector('.task-title');
   const taskNote = taskNode.querySelector('.task-note');
   const taskCheckList = taskNode.querySelectorAll('.checklist-item-div');
@@ -124,7 +152,7 @@ function editText(event) {
 }
 
 function editDate(selectedDates, dateStr, instance) {
-  const taskNode = document.querySelector('.selected');
+  const taskNode = document.querySelector('.selected-task');
   const date = endOfDay(selectedDates[0]);
   const dateDiv = taskNode.querySelector('.date-div');
 
@@ -134,7 +162,7 @@ function editDate(selectedDates, dateStr, instance) {
 
 function selectPriority(event) {
   if (!event.target.closest('.drop-link')) return;
-  const taskNode = document.querySelector('.selected');
+  const taskNode = document.querySelector('.selected-task');
   const priorityBtn = taskNode.querySelector('.priority-btn');
 
   taskNode.classList.add('editing');
@@ -147,7 +175,7 @@ function selectPriority(event) {
 
 function selectNewProj(event) {
   if (!event.target.closest('.drop-link')) return;
-  const taskNode = document.querySelector('.selected');
+  const taskNode = document.querySelector('.selected-task');
   const projBtn = taskNode.querySelector('.change-proj-btn');
 
   taskNode.classList.add('editing');
@@ -179,6 +207,7 @@ function toggleDropdown(event) {
 
 function addTaskListeners(taskNode) {
   const rightControls = taskNode.querySelector('.task-control-right');
+  const cancelBtn = taskNode.querySelector('.cancel-btn');
 
   window.addEventListener('keyup', closeTaskFromEvents);
   window.addEventListener('click', closeTaskFromEvents);
@@ -186,22 +215,15 @@ function addTaskListeners(taskNode) {
   rightControls.addEventListener('click', toggleDropdown);
   rightControls.querySelector('.priority-drop-list').addEventListener('click', selectPriority);
   rightControls.querySelector('.proj-drop-list').addEventListener('click', selectNewProj);
+  cancelBtn.addEventListener('click', cancelTaskChanges);
 }
 
-function viewTask(event) {
-  if (event.target.nodeName === 'INPUT') return;
-  if (event.target.closest('.selected')) return;
-  if (event.target.closest('.checklist-div')) return;
-  if (document.querySelector('.editing')) return;
-  if (taskNodeBackup !== null) closeTask();
-  const taskNode = event.target.closest('.task-div');
-  if (!taskNode) return;
-
+function viewTask(taskNode) {
   taskNodeBackup = taskNode.cloneNode(true);
   const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
   currentTask = getTaskFromTaskNode(taskNode);
 
-  taskNode.classList.add('selected');
+  taskNode.classList.add('selected-task');
   const bottomCtrls = document.createElement('div');
   bottomCtrls.className = 'task-control';
   const priorityDiv = taskNode.querySelector('.priority-div');
@@ -226,6 +248,18 @@ function viewTask(event) {
   leftControls.appendChild(taskNode.querySelector('.date-div'));
 
   addTaskListeners(taskNode);
+}
+
+function viewTaskFromEvents(event) {
+  if (event.target.nodeName === 'INPUT') return;
+  if (event.target.closest('.selected-task')) return;
+  if (event.target.closest('.checklist-div')) return;
+  if (document.querySelector('.editing')) return;
+  if (taskNodeBackup !== null) closeTask();
+  const taskNode = event.target.closest('.task-div');
+  if (!taskNode) return;
+
+  viewTask(taskNode);
 }
 
 function handleTickedTaskDiv(taskNode) {
@@ -284,7 +318,7 @@ function clickSubTaskCheck(event) {
   const subTaskDiv = event.target.closest('.checklist-item-div');
   if (!subTaskDiv) return;
   const taskDiv = event.target.closest('.task-div');
-  if (taskDiv.classList.contains('selected') && event.target.nodeName !== 'INPUT') return;
+  if (taskDiv.classList.contains('selected-task') && event.target.nodeName !== 'INPUT') return;
   const input = subTaskDiv.querySelector('input');
   if (event.target.nodeName !== 'INPUT') {
     input.checked = !input.checked;
@@ -357,7 +391,7 @@ function applyInitialHandlers() {
   activateSettingsHandlers();
   newProjBtn.addEventListener('click', createNewProject);
 
-  taskContainer.addEventListener('click', viewTask);
+  taskContainer.addEventListener('click', viewTaskFromEvents);
   taskContainer.addEventListener('click', clickTaskCheck);
   taskContainer.addEventListener('click', clickSubTaskCheck);
   window.addEventListener('click', closeDropdowns);
