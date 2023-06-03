@@ -16,6 +16,12 @@ input[name="title"] {
     transition: all 0.2s;
 }
 
+.editing .task-check,
+.editing .subtask-check {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .task-div:hover,
 .task-div.selected-task {
     border-radius: 3px;

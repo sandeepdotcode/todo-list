@@ -105,6 +105,19 @@ function closeTaskFromEvents(event) {
   window.removeEventListener('click', closeTaskFromEvents);
 }
 
+function turnEditingModeOff(taskNode) {
+  taskNode.classList.remove('editing');
+  taskNode.querySelector('.task-check').setAttribute('disabled', true);
+}
+
+function turnEditingModeOn(taskNode) {
+  taskNode.classList.add('editing');
+  taskNode.querySelector('.task-check').setAttribute('disabled', true);
+  taskNode.querySelectorAll('.subtask-check').forEach((subtask) => {
+    subtask.setAttribute('disabled', true);
+  });
+}
+
 function cancelTaskChanges(event) {
   const taskNode = event.target.closest('.selected-task');
   const titleBkp = taskNodeBackup.querySelector('.task-title');
@@ -129,7 +142,7 @@ function cancelTaskChanges(event) {
   priorityBtnSpan.textContent = (currentTask.priority === 0 ? '' : currentTask.priority);
   projBtnSpan.textContent = projectName;
 
-  taskNode.classList.remove('editing');
+  turnEditingModeOff(taskNode);
 }
 
 function editText(event) {
@@ -147,7 +160,7 @@ function editText(event) {
   });
   if (target !== title && target !== taskNote && !targetInCheckList) return;
 
-  taskNode.classList.add('editing');
+  turnEditingModeOn(taskNode);
   target.setAttribute('contenteditable', true);
 }
 
@@ -156,7 +169,7 @@ function editDate(selectedDates, dateStr, instance) {
   const date = endOfDay(selectedDates[0]);
   const dateDiv = taskNode.querySelector('.date-div');
 
-  taskNode.classList.add('editing');
+  turnEditingModeOn(taskNode);
   dateDiv.replaceWith(getDateDisplayNode(date));
 }
 
@@ -165,7 +178,7 @@ function selectPriority(event) {
   const taskNode = document.querySelector('.selected-task');
   const priorityBtn = taskNode.querySelector('.priority-btn');
 
-  taskNode.classList.add('editing');
+  turnEditingModeOn(taskNode);
   const selectedPriorityValue = event.target.getAttribute('data-priority');
   const priorityBtnSpan = priorityBtn.querySelector('span');
 
@@ -178,7 +191,7 @@ function selectNewProj(event) {
   const taskNode = document.querySelector('.selected-task');
   const projBtn = taskNode.querySelector('.change-proj-btn');
 
-  taskNode.classList.add('editing');
+  turnEditingModeOn(taskNode);
   const selectedProject = event.target.innerText;
   const projBtnSpan = projBtn.querySelector('span');
   projBtnSpan.textContent = selectedProject;
