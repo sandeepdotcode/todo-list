@@ -67,6 +67,12 @@ class Task {
     this.checkList.splice(index, 1);
   }
 
+  modifyCheckList(newCheckNamesArray) {
+    for (let i = 0; i < this.checkList.length; i += 1) {
+      this.checkList[i].text = newCheckNamesArray[i];
+    }
+  }
+
   toggleCompletion() {
     this.isCompleted = !this.isCompleted;
   }
