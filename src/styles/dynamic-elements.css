@@ -46,9 +46,9 @@ input[name="title"] {
     cursor: text;
 }
 
-.task-title[contenteditable],
-.task-note[contenteditable],
-.checklist-item-text[contenteditable] {
+.task-title[contenteditable="true"],
+.task-note[contenteditable="true"],
+.checklist-item-text[contenteditable"true"] {
     text-decoration: underline var(--blue-light) 2px;
 }
 

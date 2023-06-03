@@ -1,5 +1,5 @@
 import { endOfDay } from 'date-fns';
-import { getViewTaskList, toggleShowDueOnly } from './app-controller';
+import { editTask, getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
 import {
   getDateDisplayNode, loadProjHeader, loadProject, loadView,
@@ -108,6 +108,15 @@ function closeTaskFromEvents(event) {
 function turnEditingModeOff(taskNode) {
   taskNode.classList.remove('editing');
   taskNode.querySelector('.task-check').setAttribute('disabled', true);
+
+  const title = taskNode.querySelector('.task-title');
+  const note = taskNode.querySelector('.task-note');
+  const checkListItems = taskNode.querySelectorAll('.checklist-item-text');
+  if (title.getAttribute('contenteditable')) { title.setAttribute('contenteditable', false); }
+  if (note.getAttribute('contenteditable')) { note.setAttribute('contenteditable', false); }
+  checkListItems.forEach((item) => {
+    if (item.getAttribute('contenteditable')) { item.setAttribute('contenteditable', false); }
+  });
 }
 
 function turnEditingModeOn(taskNode) {
@@ -142,6 +151,39 @@ function cancelTaskChanges(event) {
   priorityBtnSpan.textContent = (currentTask.priority === 0 ? '' : currentTask.priority);
   projBtnSpan.textContent = projectName;
 
+  turnEditingModeOff(taskNode);
+}
+
+function saveTaskChanges(event) {
+  const taskNode = event.target.closest('.selected-task');
+  const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
+  const taskDetails = [];
+  taskDetails.push(taskNodeBackup.querySelector('.task-title').innerText);
+  taskDetails.push(Number(taskNode.getAttribute('data-time')));
+  taskDetails.push(projectName);
+
+  const title = taskNode.querySelector('.task-title');
+  title.innerText = title.innerText.trimEnd();
+  const descDiv = taskNode.querySelector('.task-note');
+  descDiv.innerText = descDiv.innerText.trimEnd();
+  const checkDiv = taskNode.querySelector('.checklist-div');
+  const checkList = [];
+  const newName = title.getAttribute('contenteditable') ? title.innerText : null;
+  const newDesc = descDiv.getAttribute('contenteditable') ? descDiv.innerText : null;
+  if (checkDiv) {
+    checkDiv.querySelectorAll('.checklist-item-text').forEach((text) => {
+      text.innerText = text.innerText.trimEnd();
+      checkList.push(text.innerText);
+    });
+  }
+
+  const fp = taskNode.querySelector('.date-control')._flatpickr;
+  const projBtnSpan = taskNode.querySelector('.change-proj-btn span');
+  const newDate = fp.selectedDates[0]; // modify later
+  const newPriority = taskNode.querySelector('.priority-btn').getAttribute('data-priority');
+  const newProjectName = projBtnSpan.innerText === projectName ? null : projBtnSpan.innerText;
+
+  editTask(taskDetails, newName, newDesc, checkList, newDate, newPriority, newProjectName);
   turnEditingModeOff(taskNode);
 }
 
@@ -221,6 +263,7 @@ function toggleDropdown(event) {
 function addTaskListeners(taskNode) {
   const rightControls = taskNode.querySelector('.task-control-right');
   const cancelBtn = taskNode.querySelector('.cancel-btn');
+  const saveBtn = taskNode.querySelector('.save-btn');
 
   window.addEventListener('keyup', closeTaskFromEvents);
   window.addEventListener('click', closeTaskFromEvents);
@@ -229,6 +272,7 @@ function addTaskListeners(taskNode) {
   rightControls.querySelector('.priority-drop-list').addEventListener('click', selectPriority);
   rightControls.querySelector('.proj-drop-list').addEventListener('click', selectNewProj);
   cancelBtn.addEventListener('click', cancelTaskChanges);
+  saveBtn.addEventListener('click', saveTaskChanges);
 }
 
 function viewTask(taskNode) {
