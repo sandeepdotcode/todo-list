@@ -27,7 +27,7 @@ function getPriorityNode(priority) {
   const priorityDiv = document.createElement('div');
   priorityDiv.className = 'priority-div';
   priorityDiv.setAttribute('data-priority', priority.toString());
-  priorityDiv.innerHTML = '<ion-icon name="flag"></ion-icon>';
+  if (Number(priority) !== 0) { priorityDiv.innerHTML = '<ion-icon name="flag"></ion-icon>'; }
   return priorityDiv;
 }
 
@@ -82,7 +82,7 @@ function getTaskNode(task) {
   taskNode.className = 'task-div';
   taskNode.setAttribute('data-time', task.getCreationTime());
   const taskRightDiv = taskNode.querySelector('.task-right');
-  if (task.priority !== 0) taskRightDiv.appendChild(getPriorityNode(task.priority));
+  taskRightDiv.appendChild(getPriorityNode(task.priority));
   taskRightDiv.appendChild(getDateDisplayNode(task.dueDate));
   if (!getShowDueOnlyStatus() && task.isCompleted) {
     const taskName = taskNode.querySelector('.task-title');

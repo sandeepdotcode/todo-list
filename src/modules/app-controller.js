@@ -96,7 +96,7 @@ function editTask(
   if (newDescrip) { task.description = newDescrip; }
   if (newChecklist.length) { task.modifyCheckList(newChecklist); }
   if (newDate) { task.dueDate = newDate; }
-  if (newPriority) { task.priority = newPriority; }
+  if (newPriority) { task.priority = Number(newPriority); }
   if (newProjectName) { moveToProject(taskDetails, newProjectName); }
 }
 

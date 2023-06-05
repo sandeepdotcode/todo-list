@@ -2,7 +2,8 @@ import { endOfDay } from 'date-fns';
 import { editTask, getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
 import {
-  getDateDisplayNode, loadProjHeader, loadProject, loadView,
+  getDateDisplayNode, getPriorityNode, loadProjHeader,
+  loadProject, loadView,
 } from './ui-components';
 import {
   checkCurrentViewStrict, createTaskDropdowns, getCurrentView,
@@ -156,6 +157,7 @@ function cancelTaskChanges(event) {
 
 function saveTaskChanges(event) {
   const taskNode = event.target.closest('.selected-task');
+  const taskRight = taskNode.querySelector('.task-right');
   const projectName = checkCurrentViewStrict() ? taskNode.getAttribute('data-project') : document.querySelector('.title').innerText;
   const taskDetails = [];
   taskDetails.push(taskNodeBackup.querySelector('.task-title').innerText);
@@ -181,6 +183,10 @@ function saveTaskChanges(event) {
   const projBtnSpan = taskNode.querySelector('.change-proj-btn span');
   const newDate = fp.selectedDates[0]; // modify later
   const newPriority = taskNode.querySelector('.priority-btn').getAttribute('data-priority');
+  if (Number(newPriority) !== currentTask.priority) {
+    const priorityDiv = taskRight.querySelector('.priority-div');
+    priorityDiv.replaceWith(getPriorityNode(newPriority));
+  }
   const newProjectName = projBtnSpan.innerText === projectName ? null : projBtnSpan.innerText;
 
   editTask(taskDetails, newName, newDesc, checkList, newDate, newPriority, newProjectName);
@@ -283,8 +289,7 @@ function viewTask(taskNode) {
   taskNode.classList.add('selected-task');
   const bottomCtrls = document.createElement('div');
   bottomCtrls.className = 'task-control';
-  const priorityDiv = taskNode.querySelector('.priority-div');
-  const priority = priorityDiv ? priorityDiv.getAttribute('data-priority') : '';
+  const { priority } = currentTask;
   const checkListDiv = taskNode.querySelector('.checklist-div');
   hideNode(taskNode.querySelector('.task-right'));
   bottomCtrls.innerHTML = `<div class="task-control-left"></div>
