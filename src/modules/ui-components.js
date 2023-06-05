@@ -136,5 +136,5 @@ function loadMainDisplay() {
 
 export {
   loadMainDisplay, loadView, loadProject, loadProjHeader,
-  getDateDisplayNode, getPriorityNode,
+  getDateDisplayNode, getPriorityNode, getCheckItemDiv,
 };

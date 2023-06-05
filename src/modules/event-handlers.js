@@ -2,11 +2,13 @@ import { endOfDay } from 'date-fns';
 import { editTask, getViewTaskList, toggleShowDueOnly } from './app-controller';
 import pubSub from './pubsub';
 import {
+  getCheckItemDiv,
   getDateDisplayNode, getPriorityNode, loadProjHeader,
   loadProject, loadView,
 } from './ui-components';
 import {
   checkCurrentViewStrict, createTaskDropdowns, getCurrentView,
+  getEditableCheckItem,
   getTaskFromTaskNode, getViewDisplayName, hideNode,
   makeViewSelectorActive, removeFlatpickr, removeTextStrike,
   resetDisplay,
@@ -100,7 +102,9 @@ function closeTaskFromEvents(event) {
   const taskCheck = document.querySelector('.selected-task .task-check');
   if (getShowDueOnlyStatus() && taskCheck && event.type === 'click' && taskCheck.checked) return; // Prevent .selected-task persisting after completion
   if (document.querySelector('.active-drop')) return; // Prevent closing when dropdowns are active
-  if (document.querySelector('.selected-task').classList.contains('editing')) return;
+  const taskNode = document.querySelector('.selected-task');
+  if (taskNode.classList.contains('editing')) return;
+  if (taskNode.classList.contains('add-checklist') || event.target.closest('.checklist-field-div')) return;
   closeTask();
   window.removeEventListener('keyup', closeTaskFromEvents);
   window.removeEventListener('click', closeTaskFromEvents);
@@ -266,6 +270,53 @@ function toggleDropdown(event) {
   dropBtn.classList.toggle('active-drop');
 }
 
+function stopAddingCheckItems() {
+  const taskNode = document.querySelector('.selected-task');
+  const checkDiv = taskNode.querySelector('.checklist-div');
+  const itemDivs = checkDiv.querySelectorAll('.checklist-item-div');
+  if (itemDivs.length === 0) {
+    checkDiv.remove();
+  } else {
+    const checkFieldDiv = taskNode.querySelector('.checklist-field-div');
+    checkFieldDiv.remove();
+  }
+  taskNode.classList.remove('add-checklist');
+}
+
+function newCheckItemHandler(event) {
+  if (event.type === 'keyup' && !event.target.classList.contains('add-checklist-field')) return;
+  if (event.type === 'keyup' && event.key === 'Escape') stopAddingCheckItems(event);
+
+  if (event.type === 'keyup' && event.key === 'Enter') {
+    const taskNode = document.querySelector('.selected-task');
+    const checkDiv = taskNode.querySelector('.checklist-div');
+    const checkTextSpan = event.target;
+    const itemText = checkTextSpan.innerText.trimEnd();
+    checkTextSpan.textContent = '';
+
+    currentTask.addToCheckList(itemText);
+    const index = currentTask.checkList.length - 1;
+    checkDiv.insertBefore(getCheckItemDiv(currentTask.checkList[index]), checkTextSpan.closest('div'));
+  }
+}
+
+function addCheckList(event) {
+  const taskNode = event.target.closest('.selected-task');
+  if (taskNode.querySelector('.checklist-div')) return;
+
+  taskNode.classList.add('add-checklist');
+  const checkListDiv = document.createElement('div');
+  checkListDiv.className = 'checklist-div';
+  const checkField = getEditableCheckItem();
+  checkField.addEventListener('keyup', newCheckItemHandler);
+  checkField.addEventListener('click', () => {
+    checkField.querySelector('.add-checklist-field').focus();
+  });
+  checkListDiv.appendChild(checkField);
+  taskNode.insertBefore(checkListDiv, taskNode.querySelector('.task-control'));
+  checkField.querySelector('span').focus();
+}
+
 function addTaskListeners(taskNode) {
   const rightControls = taskNode.querySelector('.task-control-right');
   const cancelBtn = taskNode.querySelector('.cancel-btn');
@@ -273,7 +324,7 @@ function addTaskListeners(taskNode) {
 
   window.addEventListener('keyup', closeTaskFromEvents);
   window.addEventListener('click', closeTaskFromEvents);
-  taskNode.addEventListener('click', editText);
+  taskNode.addEventListener('dblclick', editText);
   rightControls.addEventListener('click', toggleDropdown);
   rightControls.querySelector('.priority-drop-list').addEventListener('click', selectPriority);
   rightControls.querySelector('.proj-drop-list').addEventListener('click', selectNewProj);
@@ -309,6 +360,7 @@ function viewTask(taskNode) {
   const leftControls = taskNode.querySelector('.task-control-left');
   leftControls.appendChild(taskNode.querySelector('.date-div'));
 
+  if (!checkListDiv) bottomCtrls.querySelector('.checklist-btn').addEventListener('click', addCheckList);
   addTaskListeners(taskNode);
 }
 
@@ -317,6 +369,7 @@ function viewTaskFromEvents(event) {
   if (event.target.closest('.selected-task')) return;
   if (event.target.closest('.checklist-div')) return;
   if (document.querySelector('.editing')) return;
+  if (document.querySelector('.add-checklist')) return;
   if (taskNodeBackup !== null) closeTask();
   const taskNode = event.target.closest('.task-div');
   if (!taskNode) return;

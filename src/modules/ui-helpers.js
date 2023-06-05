@@ -129,10 +129,19 @@ function removeFlatpickr(taskNode) {
   calendar.destroy();
 }
 
+function getEditableCheckItem() {
+  const checkItemDiv = document.createElement('div');
+  checkItemDiv.className = 'checklist-field-div';
+  checkItemDiv.innerHTML = `<input type="checkbox" name="subcheck" class="subtask-check" disabled>
+  <span class="add-checklist-field" contenteditable="true"></span>`;
+
+  return checkItemDiv;
+}
+
 export {
   checkCurrentViewStrict, getCurrentView, strikeInnerText, removeTextStrike,
   setFocusToTextBox, resetDisplay, getViewDisplayName,
   makeViewSelectorActive, markViewActive, setupDateCtrl,
   removeFlatpickr, getTaskFromTaskNode, hideNode, unHideNode,
-  createTaskDropdowns,
+  createTaskDropdowns, getEditableCheckItem,
 };

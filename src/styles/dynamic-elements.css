@@ -171,7 +171,8 @@ a[data-priority="3"] {
     font-family: 'CabinetGrotesk-Regular';
 }
 
-.checklist-item-div {
+.checklist-item-div,
+.checklist-field-div {
     padding: 0.3rem 0.5rem;
     transition: all 0.2s;
     display: flex;
@@ -179,11 +180,28 @@ a[data-priority="3"] {
     border-radius: 3px;
 }
 
+.checklist-field-div {
+    border-bottom: 2px solid var(--blue-light);
+    font-family: 'CabinetGrotesk-Bold';
+}
+
+.add-checklist-field {
+    min-width: 2rem;
+    height: 1rem;
+    margin-left: 0.5rem;
+}
+
+.add-checklist-field:focus {
+    outline: none;
+    caret-color: var(--blue-light);
+}
+
 .checklist-item-div:hover {
     background-color: var(--bg-sidebar-light);
 }
 
-.checklist-item-div + .checklist-item-div {
+.checklist-item-div + .checklist-item-div,
+.checklist-item-div + .checklist-field-div {
     border-top: solid 0.1px var(--bg-sidebar-light);
 }
 
@@ -251,6 +269,10 @@ a[data-priority="3"] {
     display: flex;
     align-items: center;
     gap: 0.1rem;
+}
+
+.add-checklist .checklist-btn {
+    display: none;
 }
 
 .priority-btn[data-priority] {
