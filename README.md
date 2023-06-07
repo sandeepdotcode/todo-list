@@ -1,4 +1,4 @@
-# To Do List (WiP)
+# Tsilo Dot (WiP)
 
 A To Do List app built using vanilla JavaScript.
 
@@ -7,6 +7,7 @@ A To Do List app built using vanilla JavaScript.
 By doing this project, I learned
 
 Javascript:
+- Using ES6 Modules to organise code
 - Using PubSub pattern to reduce coupling between core logic modules & DOM modules
 - Single responsibility & other SOLID principles
 
@@ -25,12 +26,14 @@ CSS:
 ## **Features to be added**:
 
 - [ ] Refactor code
+- [ ] Change Direction of dropdowns if there is no space available
+- [ ] Ability to delete projects
 - [ ] Make the site more accessible
 - [ ] Fix focus styles
 - [ ] Delete tasks
 - [ ] Drag to reposition tasks, projects & checklist items
 - [ ] Dark mode
 - [ ] Undo Task Completion and deletion
-- [ ] customise date-picker
+- [ ] Customise date-picker
 - [ ] Undo each step of task editing
 - [ ] Show guides on hover
