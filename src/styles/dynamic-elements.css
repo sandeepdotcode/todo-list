@@ -9,11 +9,36 @@ input[name="title"] {
     width: 80%;
 }
 
-.task-div {
+.task-div,
+.add-new-task-form {
     display: flex;
     flex-direction: column;
     padding: 0 1%;
     transition: all 0.2s;
+}
+
+.task-title-input {
+    all: unset;
+    font-family: 'CabinetGrotesk-Bold';
+    border-bottom: 2px solid var(--blue-light);
+}
+
+
+.task-note-field {
+    all: unset;
+    margin: 0.3rem 2rem 0.8rem;
+    font-family: 'CabinetGrotesk-Medium';
+    padding: 0.2rem;
+}
+
+.task-title-input:hover,
+.task-note-field:hover {
+    cursor: text;
+}
+
+.task-note-field:focus {
+    /* border-bottom: 2px solid black; */
+    outline: 2px solid var(--blue-light);
 }
 
 .editing .task-check,
@@ -23,7 +48,8 @@ input[name="title"] {
 }
 
 .task-div:hover,
-.task-div.selected-task {
+.task-div.selected-task,
+.add-new-task-form {
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
@@ -48,7 +74,7 @@ input[name="title"] {
 
 .task-title[contenteditable="true"],
 .task-note[contenteditable="true"],
-.checklist-item-text[contenteditable"true"] {
+.checklist-item-text[contenteditable="true"] {
     text-decoration: underline var(--blue-light) 2px;
 }
 
@@ -247,7 +273,8 @@ a[data-priority="3"] {
 }
 
 /* task edit */
-.task-control {
+.task-control,
+.task-form-control {
     font-family: 'CabinetGrotesk-Medium';
     font-size: 0.9rem;
     padding-left: 2.25rem;
@@ -257,7 +284,8 @@ a[data-priority="3"] {
     align-items: center;
 }
 
-.task-control button {
+.task-control button,
+.task-form-control button {
     all: unset;
     cursor: pointer;
     height: 1.8rem;
@@ -320,7 +348,8 @@ a[data-priority="3"] {
     justify-content: center;
 }
 
-.editing .control-button-div {
+.editing .control-button-div,
+.add-new-task-form .control-button-div {
     display: flex;
 }
 

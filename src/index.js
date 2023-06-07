@@ -30,7 +30,8 @@ function todoListDisplay() {
   window.addCheck = addSubTask;
   window.togglCheck = toggleSubTask;
   window.deleteCheck = deleteSubTask;
-  addNewTask('Buy Groceries', 'Purchase Groceries for the week', 1, '2023-04-17', ['Go to Shop', 'Buy Vegetables', 'Buy Fruits', 'Buy '], 'Shopping List');
+  addNewTask('Buy Groceries', 'Purchase Groceries for the week', 1, '2023-06-18', ['Go to Shop', 'Buy Vegetables', 'Buy Fruits', 'Buy Meat'], 'Shopping List');
+  addNewTask('Read', 'Read a book', 1, '2023-06-05', null, 'Inbox');
   window.changePrio = changeTaskPriority;
   window.changeDue = changeDueDate;
   window.editTask = editTask;

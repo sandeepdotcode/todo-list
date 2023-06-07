@@ -1,6 +1,5 @@
 import flatpickr from 'flatpickr';
 import { getProjectNames, getTaskFromProject } from './app-controller';
-import { editDate } from './event-handlers';
 
 function setFocusToTextBox(node) {
   node.focus();
@@ -66,6 +65,18 @@ function removeTextStrike(node) {
   node.classList.remove('striked');
 }
 
+function addFlatpickr(dateInputClass, defaultDueDate) {
+  flatpickr(dateInputClass, {
+    enableTime: false,
+    altInput: true,
+    dateFormat: 'Y-m-d',
+    altFormat: 'F j, Y',
+    // dateFormat: 'Y-m-d H-i',
+    // altFormat: 'H:i F j, Y',
+    defaultDate: defaultDueDate,
+  });
+}
+
 function setupDateCtrl(ctrlNode, currentTask) {
   const ctrlLeft = ctrlNode.querySelector('.task-control-left');
   if (!currentTask.dueDate) {
@@ -73,16 +84,7 @@ function setupDateCtrl(ctrlNode, currentTask) {
     <ion-icon name="calendar-number-outline" class="add-date-icon" aria-hidden="true"></ion-icon>Add Date</button>`;
   } else {
     ctrlLeft.innerHTML = '<input type="text" class="date-control"></input>';
-    flatpickr('.date-control', {
-      enableTime: false,
-      altInput: true,
-      dateFormat: 'Y-m-d',
-      altFormat: 'F j, Y',
-      // dateFormat: 'Y-m-d H-i',
-      // altFormat: 'H:i F j, Y',
-      defaultDate: currentTask.dueDate,
-      onChange: editDate,
-    });
+    addFlatpickr('.date-control', currentTask.dueDate);
   }
 }
 
@@ -101,8 +103,7 @@ function unHideNode(node) {
   node.classList.remove('hidden');
 }
 
-function createTaskDropdowns() {
-  const taskNode = document.querySelector('.selected-task');
+function createTaskDropdowns(taskNode) {
   const priorityDropDiv = taskNode.querySelector('.priority-dropdown');
   const projDropDiv = taskNode.querySelector('.proj-dropdown');
 
@@ -143,5 +144,5 @@ export {
   setFocusToTextBox, resetDisplay, getViewDisplayName,
   makeViewSelectorActive, markViewActive, setupDateCtrl,
   removeFlatpickr, getTaskFromTaskNode, hideNode, unHideNode,
-  createTaskDropdowns, getEditableCheckItem,
+  createTaskDropdowns, getEditableCheckItem, addFlatpickr,
 };

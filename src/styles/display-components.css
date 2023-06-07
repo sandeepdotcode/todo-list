@@ -169,7 +169,9 @@ header, main {
 .project-display {
     min-height: 100%;
     grid-area: display;
-    padding: 2rem 15% 0;
+    padding: 2rem 15% 2rem;
+    margin-bottom: 2rem;
+    overflow-y: auto;
 }
 
 .proj-description {
@@ -179,7 +181,28 @@ header, main {
 }
 
 .task-container {
-    padding: 0 20px;
+    padding: 0 20px 15rem;
+}
+
+.add-new-task-btn {
+    all: unset;
+    width: 100%;
+    cursor: pointer;
+    padding: 0 1%;
+    height: 2.5rem;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'CabinetGrotesk-Medium';
+}
+
+.adding-task .add-new-task-btn {
+    display: none;
+}
+
+.add-new-task-btn:hover {
+    background-color: var(--bg-sidebar-light);
 }
 
 

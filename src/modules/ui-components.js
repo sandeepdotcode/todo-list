@@ -130,6 +130,15 @@ function loadMainDisplay() {
   });
 }
 
+function addNewTaskButton() {
+  const addTaskBtn = document.createElement('button');
+  const taskContainer = document.querySelector('.task-container');
+  addTaskBtn.className = 'add-new-task-btn';
+  addTaskBtn.innerHTML = '<ion-icon name="add-outline"></ion-icon> Add New Task  . . .';
+
+  taskContainer.prepend(addTaskBtn);
+}
+
 (function subsribeToPubSub() {
   pubSub.subscribe('projectAdded', addProjToSidebar);
 }());
@@ -137,4 +146,5 @@ function loadMainDisplay() {
 export {
   loadMainDisplay, loadView, loadProject, loadProjHeader,
   getDateDisplayNode, getPriorityNode, getCheckItemDiv,
+  addNewTaskButton,
 };
