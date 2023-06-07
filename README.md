@@ -25,6 +25,7 @@ CSS:
 
 ## **Features to be added**:
 
+- [ ] Add localStorage
 - [ ] Refactor code
 - [ ] Change Direction of dropdowns if there is no space available
 - [ ] Ability to delete projects
@@ -37,3 +38,5 @@ CSS:
 - [ ] Customise date-picker
 - [ ] Undo each step of task editing
 - [ ] Show guides on hover
+- [ ] Add database to store data in cloud
+- [ ] Add user authentication
